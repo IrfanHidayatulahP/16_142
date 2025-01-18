@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FinalProjectPAM</string>
+    <string name="title_home">Home</string>
+    <string name="title_asset">Asset</string>
+    <string name="title_kategori">Kategori</string>
+    <string name="title_pendapatan">Pendapatan</string>
+    <string name="title_pengeluaran">Pengeluaran</string>
+</resources>

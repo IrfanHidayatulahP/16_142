@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.finalprojectpam.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_asset"
+        android:name="com.example.finalprojectpam.ui.asset.AssetFragment"
+        android:label="@string/title_asset"
+        tools:layout="@layout/fragment_asset" />
+
+    <fragment
+        android:id="@+id/navigation_kategori"
+        android:name="com.example.finalprojectpam.ui.kategori.KategoriFragment"
+        android:label="@string/title_kategori"
+        tools:layout="@layout/fragment_kategori" />
+
+    <fragment
+        android:id="@+id/navigation_pendapatan"
+        android:name="com.example.finalprojectpam.ui.pendapatan.PendapatanFragment"
+        android:label="@string/title_pendapatan"
+        tools:layout="@layout/fragment_pendapatan" />
+
+    <fragment
+        android:id="@+id/navigation_pengeluaran"
+        android:name="com.example.finalprojectpam.ui.pengeluaran.PengeluaranFragment"
+        android:label="@string/title_pengeluaran"
+        tools:layout="@layout/fragment_pengeluaran" />
+
+</navigation>
