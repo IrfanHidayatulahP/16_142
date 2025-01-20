@@ -1,5 +1,15 @@
-package com.example.finalprojectpam.Repository
+package com.example.finalprojectpam.DependenciesInjection
 
+import com.example.finalprojectpam.Repository.AsetRepository
+import com.example.finalprojectpam.Repository.KategoriRepository
+import com.example.finalprojectpam.Repository.NetworkAsetRepository
+import com.example.finalprojectpam.Repository.NetworkKategoriRepository
+import com.example.finalprojectpam.Repository.NetworkPendapatanRepository
+import com.example.finalprojectpam.Repository.NetworkPengeluaranRepository
+import com.example.finalprojectpam.Repository.NetworkSaldoRepository
+import com.example.finalprojectpam.Repository.PendapatanRepository
+import com.example.finalprojectpam.Repository.PengeluaranRepository
+import com.example.finalprojectpam.Repository.SaldoRepository
 import com.example.finalprojectpam.service_api.AsetApiService
 import com.example.finalprojectpam.service_api.KategoriApiService
 import com.example.finalprojectpam.service_api.PendapatanApiService
