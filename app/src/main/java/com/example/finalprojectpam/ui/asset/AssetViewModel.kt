@@ -1,6 +1,5 @@
 package com.example.finalprojectpam.ui.asset
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -27,13 +26,10 @@ class AssetViewModel(private val asetRepository: AsetRepository) : ViewModel() {
     fun getAset() {
         viewModelScope.launch {
             asetUiState = HomeUiState.Loading
-            Log.d("AssetViewModel", "Loading Data")
             asetUiState = try {
                 val asetList = asetRepository.getAset()
-                Log.d("AssetViewModel", "Data Loaded: $asetList")
                 HomeUiState.Success(asetList)
             } catch (e: Exception) {
-                Log.e("AssetViewModel", "Error: ${e.localizedMessage}")
                 HomeUiState.Error(e.localizedMessage ?: "Unknown error")
             }
         }

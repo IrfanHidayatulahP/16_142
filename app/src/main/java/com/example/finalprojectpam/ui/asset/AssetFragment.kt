@@ -77,7 +77,6 @@ class AssetFragment : Fragment() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeAset(
     navigateToItemEntry: () -> Unit,
