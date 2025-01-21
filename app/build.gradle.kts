@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -51,19 +52,29 @@ android {
 }
 
 dependencies {
-
+    // AndroidX Core Libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+
+    // Jetpack Compose
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.ui)
+    implementation(libs.androidx.material3.v120)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+
+    // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,15 +82,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Retrofit
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    // Networking: Retrofit and OkHttp
     implementation(libs.retrofit)
     implementation(libs.okhttp)
-    implementation(libs.coil.compose)
-    implementation(libs.kotlinx.serialization.json)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.navigation:navigation-compose:2.8.3")
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.json.v163)
+
+    // Image Loading: Coil
+    implementation(libs.coil.compose)
 }
