@@ -52,7 +52,6 @@ class KategoriFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Using the custom factory to create the AssetViewModel
         viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(KategoriViewModel::class.java)
 
         return ComposeView(requireContext()).apply {

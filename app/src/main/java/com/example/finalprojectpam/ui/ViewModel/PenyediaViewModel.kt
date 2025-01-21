@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.finalprojectpam.DependenciesInjection.PencatatanApplication
 import com.example.finalprojectpam.ui.asset.AssetViewModel
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
+import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
 
 object PenyediaViewModel {
     val Factory = viewModelFactory {
@@ -15,6 +16,9 @@ object PenyediaViewModel {
         }
         initializer {
             KategoriViewModel(pencatatanApplication().container.kategoriRepository)
+        }
+        initializer {
+            PendapatanViewModel(pencatatanApplication().container.pendapatanRepository)
         }
     }
 }
