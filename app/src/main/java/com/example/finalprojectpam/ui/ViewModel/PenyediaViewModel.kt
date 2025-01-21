@@ -8,6 +8,7 @@ import com.example.finalprojectpam.DependenciesInjection.PencatatanApplication
 import com.example.finalprojectpam.ui.asset.AssetViewModel
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
+import com.example.finalprojectpam.ui.pengeluaran.PengeluaranViewModel
 
 object PenyediaViewModel {
     val Factory = viewModelFactory {
@@ -19,6 +20,9 @@ object PenyediaViewModel {
         }
         initializer {
             PendapatanViewModel(pencatatanApplication().container.pendapatanRepository)
+        }
+        initializer {
+            PengeluaranViewModel(pencatatanApplication().container.pengeluaranRepository)
         }
     }
 }
