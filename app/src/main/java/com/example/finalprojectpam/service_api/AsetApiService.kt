@@ -12,8 +12,8 @@ import retrofit2.http.Query
 
 interface AsetApiService {
     @Headers(
-        "Accept : application/json",
-        "Content-Type : application/json",
+        "Accept: application/json",
+        "Content-Type: application/json",
     )
     @GET("bacaaset.php")
     suspend fun getAset() : List<Aset>

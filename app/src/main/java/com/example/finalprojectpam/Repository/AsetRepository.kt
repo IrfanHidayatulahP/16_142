@@ -1,5 +1,6 @@
 package com.example.finalprojectpam.Repository
 
+import android.util.Log
 import com.example.finalprojectpam.model.Aset
 import com.example.finalprojectpam.service_api.AsetApiService
 
@@ -13,8 +14,11 @@ interface AsetRepository {
 class NetworkAsetRepository (
     private val asetApiService: AsetApiService
 ) : AsetRepository {
-    override suspend fun getAset(): List<Aset> =
-        asetApiService.getAset()
+    override suspend fun getAset(): List<Aset> {
+        val asetList = asetApiService.getAset()
+        Log.d("AsetRepository", "Received Aset: $asetList")
+        return asetList
+    }
 
     override suspend fun insertAset(aset: Aset) {
         asetApiService.insertAset(aset)

@@ -1,6 +1,7 @@
 package com.example.finalprojectpam.ui.asset
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -84,8 +85,6 @@ fun HomeAset(
     onDetailClick: (Aset) -> Unit = {},
     viewModel: AssetViewModel
 ) {
-    val homeUiState by viewModel.asetUiState.collectAsState()
-
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
@@ -99,7 +98,7 @@ fun HomeAset(
         }
     ) { innerPadding ->
         HomeStatus(
-            homeUiState = homeUiState,
+            homeUiState = viewModel.asetUiState,
             retryAction = { viewModel.getAset() },
             modifier = Modifier.padding(innerPadding),
             onDetailClick = onDetailClick,
@@ -122,21 +121,18 @@ fun HomeStatus(
         is HomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
 
         is HomeUiState.Success ->
-            if (homeUiState.aset.isEmpty()) {
-                return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak Ada Aset")
-                }
-            } else {
-                AsetLayout(
-                    aset = homeUiState.aset,
-                    modifier = modifier.fillMaxWidth(),
-                    onDetailClick = {
-                        onDetailClick(it)
-                    },
-                    onDeleteClick = {
-                        onDeleteClick(it)
+            if (homeUiState is HomeUiState.Success) {
+                if (homeUiState.aset.isEmpty()) {
+                    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(text = "Tidak Ada Aset")
                     }
-                )
+                } else {
+                    AsetLayout(
+                        aset = homeUiState.aset,
+                        onDetailClick = onDetailClick,
+                        onDeleteClick = onDeleteClick
+                    )
+                }
             }
         is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
     }
@@ -182,12 +178,13 @@ fun AsetLayout(
     onDetailClick: (Aset) -> Unit,
     onDeleteClick: (Aset) -> Unit = {},
 ) {
-    LazyColumn (
+    Log.d("AsetLayout", "Total Aset: ${aset.size}")
+    LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(aset) {ast ->
+        items(aset) { ast ->
             AsetCard(
                 aset = ast,
                 modifier = Modifier

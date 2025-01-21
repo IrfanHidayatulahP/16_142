@@ -1,12 +1,13 @@
 package com.example.finalprojectpam.ui.asset
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalprojectpam.Repository.AsetRepository
 import com.example.finalprojectpam.model.Aset
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 sealed class HomeUiState {
@@ -16,8 +17,8 @@ sealed class HomeUiState {
 }
 
 class AssetViewModel(private val asetRepository: AsetRepository) : ViewModel() {
-    private val _asetUiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
-    val asetUiState: StateFlow<HomeUiState> = _asetUiState.asStateFlow()
+    var asetUiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
+        private set
 
     init {
         getAset()
@@ -25,22 +26,27 @@ class AssetViewModel(private val asetRepository: AsetRepository) : ViewModel() {
 
     fun getAset() {
         viewModelScope.launch {
-            _asetUiState.value = HomeUiState.Loading
-            _asetUiState.value = try {
-                HomeUiState.Success(asetRepository.getAset())
+            asetUiState = HomeUiState.Loading
+            Log.d("AssetViewModel", "Loading Data")
+            asetUiState = try {
+                val asetList = asetRepository.getAset()
+                Log.d("AssetViewModel", "Data Loaded: $asetList")
+                HomeUiState.Success(asetList)
             } catch (e: Exception) {
+                Log.e("AssetViewModel", "Error: ${e.localizedMessage}")
                 HomeUiState.Error(e.localizedMessage ?: "Unknown error")
             }
         }
     }
 
-    fun deleteAset(idAset: String) {
+
+    fun deleteAset(id_aset: String) {
         viewModelScope.launch {
             try {
-                asetRepository.deleteAset(idAset)
+                asetRepository.deleteAset(id_aset)
                 getAset() // Refresh data
             } catch (e: Exception) {
-                _asetUiState.value = HomeUiState.Error(e.localizedMessage ?: "Failed to delete asset")
+                asetUiState = HomeUiState.Error(e.localizedMessage ?: "Failed to delete asset")
             }
         }
     }
