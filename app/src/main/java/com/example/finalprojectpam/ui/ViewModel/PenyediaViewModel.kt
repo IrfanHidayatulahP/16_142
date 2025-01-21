@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.finalprojectpam.DependenciesInjection.PencatatanApplication
 import com.example.finalprojectpam.ui.asset.AssetViewModel
+import com.example.finalprojectpam.ui.asset.InsertAssetViewModel
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
 import com.example.finalprojectpam.ui.pengeluaran.PengeluaranViewModel
@@ -23,6 +24,9 @@ object PenyediaViewModel {
         }
         initializer {
             PengeluaranViewModel(pencatatanApplication().container.pengeluaranRepository)
+        }
+        initializer {
+            InsertAssetViewModel(pencatatanApplication().container.asetRepository)
         }
     }
 }
