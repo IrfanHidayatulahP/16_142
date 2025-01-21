@@ -18,6 +18,9 @@ interface PengeluaranApiService {
     @GET("bacapengeluaran.php")
     suspend fun getPengeluaran(): List<Pengeluaran>
 
+    @GET("getpengeluaran.php")
+    suspend fun getPengeluaran(pengeluaran: Pengeluaran)
+
     @POST("insertpengeluaran.php")
     suspend fun insertPengeluaran(@Body pengeluaran: Pengeluaran)
 

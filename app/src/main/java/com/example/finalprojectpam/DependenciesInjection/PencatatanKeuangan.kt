@@ -6,15 +6,12 @@ import com.example.finalprojectpam.Repository.NetworkAsetRepository
 import com.example.finalprojectpam.Repository.NetworkKategoriRepository
 import com.example.finalprojectpam.Repository.NetworkPendapatanRepository
 import com.example.finalprojectpam.Repository.NetworkPengeluaranRepository
-import com.example.finalprojectpam.Repository.NetworkSaldoRepository
 import com.example.finalprojectpam.Repository.PendapatanRepository
 import com.example.finalprojectpam.Repository.PengeluaranRepository
-import com.example.finalprojectpam.Repository.SaldoRepository
 import com.example.finalprojectpam.service_api.AsetApiService
 import com.example.finalprojectpam.service_api.KategoriApiService
 import com.example.finalprojectpam.service_api.PendapatanApiService
 import com.example.finalprojectpam.service_api.PengeluaranApiService
-import com.example.finalprojectpam.service_api.SaldoApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -25,7 +22,6 @@ interface AppContainer {
     val kategoriRepository: KategoriRepository
     val pengeluaranRepository: PengeluaranRepository
     val pendapatanRepository: PendapatanRepository
-    val saldoRepository: SaldoRepository
 }
 
 class PencatatanKeuangan : AppContainer {
@@ -52,10 +48,6 @@ class PencatatanKeuangan : AppContainer {
         retrofit.create(PengeluaranApiService::class.java)
     }
 
-    private val saldoApiService: SaldoApiService by lazy {
-        retrofit.create(SaldoApiService::class.java)
-    }
-
     override val asetRepository: AsetRepository by lazy {
         NetworkAsetRepository(asetApiService)
     }
@@ -70,9 +62,5 @@ class PencatatanKeuangan : AppContainer {
 
     override val pengeluaranRepository: PengeluaranRepository by lazy {
         NetworkPengeluaranRepository(pengeluaranApiService)
-    }
-
-    override val saldoRepository: SaldoRepository by lazy {
-        NetworkSaldoRepository(saldoApiService)
     }
 }
