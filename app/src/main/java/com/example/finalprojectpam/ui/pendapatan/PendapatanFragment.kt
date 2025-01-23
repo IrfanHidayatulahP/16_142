@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
 import com.example.finalprojectpam.model.Pendapatan
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
@@ -58,7 +59,7 @@ class PendapatanFragment : Fragment() {
                 MaterialTheme {
                     HomePendapatan(
                         navigateToItemEntry = {
-                            // Navigasi ke layar entry aset
+                            findNavController().navigate(R.id.action_pendapatan_to_insert)
                         },
                         onDetailClick = {
                             // Handle detail click
@@ -68,6 +69,10 @@ class PendapatanFragment : Fragment() {
                 }
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPendapatan() // Refresh data saat kembali ke halaman ini
     }
 }
 
@@ -84,9 +89,9 @@ fun HomePendapatan(
             FloatingActionButton(
                 onClick = navigateToItemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(50.dp)
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Asset")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Pendapatan")
             }
         }
     ) { innerPadding ->

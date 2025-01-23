@@ -8,6 +8,7 @@
     <string name="title_insert">Insert Asset</string>
     <string name="add_asset">Add Asset</string>
     <string name="add_kategori">Add Kategori</string>
+    <string name="add_pendapatan">Add Pendapatan</string>
     <string name="edit_asset">Edit Asset</string>
     <string name="edit_kategori">Edit Kategori</string>
     <string name="loading_failed">Failed to Load</string>

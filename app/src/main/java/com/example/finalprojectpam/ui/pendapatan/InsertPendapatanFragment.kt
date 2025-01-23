@@ -131,15 +131,6 @@ fun FormInput(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         OutlinedTextField(
-            value = insertDapatEvent.id_pendapatan,
-            onValueChange = {onValueChange(insertDapatEvent.copy(id_pendapatan = it))},
-            label = { Text("Id Pendapatan") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        OutlinedTextField(
             value = insertDapatEvent.id_aset,
             onValueChange = {onValueChange(insertDapatEvent.copy(id_aset = it))},
             label = { Text("Id Aset") },
@@ -178,7 +169,7 @@ fun FormInput(
         OutlinedTextField(
             value = insertDapatEvent.catatan,
             onValueChange = {onValueChange(insertDapatEvent.copy(catatan = it))},
-            label = { Text("Kelas") },
+            label = { Text("Catatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true

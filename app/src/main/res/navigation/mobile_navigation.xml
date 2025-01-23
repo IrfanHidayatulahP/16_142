@@ -31,7 +31,6 @@
                 app:argType="string" />
         </action>
     </fragment>
-
     <!-- Update Asset Fragment -->
     <fragment
         android:id="@+id/navigation_edit"
@@ -43,7 +42,6 @@
             android:name="id_aset"
             app:argType="string" />
     </fragment>
-
     <!-- Insert Asset Fragment -->
     <fragment
         android:id="@+id/navigation_insert"
@@ -54,6 +52,7 @@
             android:id="@+id/action_insert_to_asset"
             app:destination="@+id/navigation_asset" />
     </fragment>
+
 
     <!-- Kategori Fragment -->
     <fragment
@@ -74,7 +73,6 @@
                 app:argType="string" />
         </action>
     </fragment>
-
     <!-- Insert Kategori Fragment -->
     <fragment
         android:id="@+id/navigation_insert_kategori"
@@ -85,7 +83,6 @@
             android:id="@+id/action_insert_to_kategori"
             app:destination="@+id/navigation_kategori" />
     </fragment>
-
     <!-- Update Kategori Fragment -->
     <fragment
         android:id="@+id/navigation_edit_kategori"
@@ -98,12 +95,28 @@
             app:argType="string" />
     </fragment>
 
+
     <!-- Pendapatan Fragment -->
     <fragment
         android:id="@+id/navigation_pendapatan"
         android:name="com.example.finalprojectpam.ui.pendapatan.PendapatanFragment"
         android:label="@string/title_pendapatan"
-        tools:layout="@layout/fragment_pendapatan" />
+        tools:layout="@layout/fragment_pendapatan">
+    <action
+        android:id="@+id/action_pendapatan_to_insert"
+        app:destination="@+id/navigation_insert_pendapatan" />
+    </fragment>
+    <!-- Insert Pendapatan Fragment -->
+    <fragment
+        android:id="@+id/navigation_insert_pendapatan"
+        android:name="com.example.finalprojectpam.ui.pendapatan.InsertPendapatanFragment"
+        tools:layout="@layout/fragment_insert_pendapatan">
+        <!-- Action to go back to Asset Fragment -->
+        <action
+            android:id="@+id/action_insert_to_pendapatan"
+            app:destination="@+id/navigation_pendapatan" />
+    </fragment>
+
 
     <!-- Pengeluaran Fragment -->
     <fragment

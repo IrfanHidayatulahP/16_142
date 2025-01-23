@@ -77,6 +77,11 @@ class AssetFragment : Fragment() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAset() // Refresh data saat kembali ke halaman ini
+    }
 }
 
 @Composable
