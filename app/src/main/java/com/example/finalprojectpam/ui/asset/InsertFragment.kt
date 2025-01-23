@@ -1,5 +1,9 @@
 package com.example.finalprojectpam.ui.asset
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,10 +22,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
 import kotlinx.coroutines.launch
+
+class InsertFragment : Fragment() {
+
+    private lateinit var viewModel: InsertAssetViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Using the custom factory to create the AssetViewModel
+        viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(InsertAssetViewModel::class.java)
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MaterialTheme {
+                    EntryAsetScreen(
+                        navigateBack = {
+                            // Navigasi ke layar entry aset
+                        },
+                        viewModel = viewModel
+                    )
+                }
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

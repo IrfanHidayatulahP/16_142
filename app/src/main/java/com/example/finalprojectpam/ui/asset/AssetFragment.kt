@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,8 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -43,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
 import com.example.finalprojectpam.model.Aset
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
@@ -55,23 +53,22 @@ class AssetFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Using the custom factory to create the AssetViewModel
         viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(AssetViewModel::class.java)
 
         return ComposeView(requireContext()).apply {
             setContent {
-                MaterialTheme {
-                    HomeAset(
-                        navigateToItemEntry = {
-                            // Navigasi ke layar entry aset
-                        },
-                        onDetailClick = {
-                            // Handle detail click
-                        },
-                        viewModel = viewModel
-                    )
-                }
+                HomeAset(
+                    navigateToItemEntry = {
+                        // Navigasi ke layar entry aset
+                        findNavController()
+                            .navigate(R.id.action_asset_to_insert) },
+                    onDetailClick = {
+                    // Handle detail click
+                    },
+                    viewModel = viewModel
+                )
             }
         }
     }
