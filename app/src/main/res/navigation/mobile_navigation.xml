@@ -23,7 +23,11 @@
     <fragment
         android:id="@+id/navigation_insert"
         android:name="com.example.finalprojectpam.ui.asset.InsertFragment"
-        tools:layout="@layout/fragment_insert_aset" />
+        tools:layout="@layout/fragment_insert_aset">
+        <action
+            android:id="@+id/action_insert_to_asset"
+            app:destination="@+id/navigation_asset" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_kategori"

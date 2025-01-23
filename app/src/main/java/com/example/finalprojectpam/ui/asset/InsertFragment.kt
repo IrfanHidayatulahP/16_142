@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.fragment.findNavController
+import com.example.finalprojectpam.R
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
@@ -46,14 +48,17 @@ class InsertFragment : Fragment() {
             setContent {
                 MaterialTheme {
                     EntryAsetScreen(
-                        navigateBack = {
-                            // Navigasi ke layar entry aset
-                        },
+                        navigateBack = { navigateToAssetFragment() },
                         viewModel = viewModel
                     )
                 }
             }
         }
+    }
+
+    private fun navigateToAssetFragment() {
+        // Navigasi menggunakan NavController
+        findNavController().navigate(R.id.navigation_asset)
     }
 }
 
