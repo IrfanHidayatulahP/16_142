@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
 import com.example.finalprojectpam.model.Kategori
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
@@ -59,7 +60,7 @@ class KategoriFragment : Fragment() {
                 MaterialTheme {
                     HomeKategori(
                         navigateToItemEntry = {
-                            // Navigasi ke layar entry aset
+                            findNavController().navigate(R.id.action_kategori_to_insert)
                         },
                         onDetailClick = {
                             // Handle detail click
@@ -87,7 +88,7 @@ fun HomeKategori(
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(18.dp)
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Asset")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Kategori")
             }
         }
     ) { innerPadding ->
@@ -118,7 +119,7 @@ fun KatStatus(
             if (katUiState is KatUiState.Success) {
                 if (katUiState.kategori.isEmpty()) {
                     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = "Tidak Ada Aset")
+                        Text(text = "Tidak Ada Kategori")
                     }
                 } else {
                     KategoriLayout(

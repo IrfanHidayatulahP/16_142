@@ -9,6 +9,7 @@ import com.example.finalprojectpam.DependenciesInjection.PencatatanApplication
 import com.example.finalprojectpam.ui.asset.AssetViewModel
 import com.example.finalprojectpam.ui.asset.InsertAssetViewModel
 import com.example.finalprojectpam.ui.asset.UpdateAssetViewModel
+import com.example.finalprojectpam.ui.kategori.InsertKategoriViewModel
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
 import com.example.finalprojectpam.ui.pengeluaran.PengeluaranViewModel
@@ -38,6 +39,10 @@ object PenyediaViewModel {
                 pencatatanApplication().container.asetRepository,
                 id_aset
             )
+        }
+
+        initializer {
+            InsertKategoriViewModel(pencatatanApplication().container.kategoriRepository)
         }
     }
 }

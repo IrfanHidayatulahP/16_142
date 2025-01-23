@@ -60,7 +60,23 @@
         android:id="@+id/navigation_kategori"
         android:name="com.example.finalprojectpam.ui.kategori.KategoriFragment"
         android:label="@string/title_kategori"
-        tools:layout="@layout/fragment_kategori" />
+        tools:layout="@layout/fragment_kategori" >
+        <!-- Action to go back to Kategori Fragment -->
+        <action
+            android:id="@+id/action_kategori_to_insert"
+            app:destination="@+id/navigation_insert_kategori" />
+    </fragment>
+
+    <!-- Insert Kategori Fragment -->
+    <fragment
+        android:id="@+id/navigation_insert_kategori"
+        android:name="com.example.finalprojectpam.ui.kategori.InsertKategoriFragment"
+        tools:layout="@layout/fragment_insert_kategori">
+        <!-- Action to go back to Asset Fragment -->
+        <action
+            android:id="@+id/action_insert_to_kategori"
+            app:destination="@+id/navigation_kategori" />
+    </fragment>
 
     <!-- Pendapatan Fragment -->
     <fragment
