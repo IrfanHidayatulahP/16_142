@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,6 +40,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
 import com.example.finalprojectpam.model.Aset
@@ -61,13 +65,14 @@ class AssetFragment : Fragment() {
             setContent {
                 HomeAset(
                     navigateToItemEntry = {
-                        // Navigasi ke layar entry aset
-                        findNavController()
-                            .navigate(R.id.action_asset_to_insert) },
-                    onDetailClick = {
-                    // Handle detail click
+                        findNavController().navigate(R.id.action_asset_to_insert)
                     },
-                    viewModel = viewModel
+                    onEditClick = { aset ->
+                        val action = AssetFragmentDirections.actionAssetToUpdate(aset.id_aset)
+                        findNavController().navigate(action)
+                    },
+                    viewModel = viewModel,
+                    navController = findNavController() // Pass the correct NavController
                 )
             }
         }
@@ -78,8 +83,9 @@ class AssetFragment : Fragment() {
 fun HomeAset(
     navigateToItemEntry: () -> Unit,
     modifier: Modifier = Modifier,
-    onDetailClick: (Aset) -> Unit = {},
-    viewModel: AssetViewModel
+    onEditClick: (Aset) -> Unit,
+    viewModel: AssetViewModel,
+    navController: NavController
 ) {
     Scaffold(
         modifier = modifier,
@@ -97,10 +103,11 @@ fun HomeAset(
             homeUiState = viewModel.asetUiState,
             retryAction = { viewModel.getAset() },
             modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailClick,
             onDeleteClick = { aset ->
                 viewModel.deleteAset(aset.id_aset)
-            }
+            },
+            onEditClick = onEditClick,
+            navController = navController
         )
     }
 }
@@ -111,7 +118,8 @@ fun HomeStatus(
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     onDeleteClick: (Aset) -> Unit = {},
-    onDetailClick: (Aset) -> Unit
+    navController: NavController,
+    onEditClick: (Aset) -> Unit
 ) {
     when (homeUiState) {
         is HomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
@@ -125,8 +133,9 @@ fun HomeStatus(
                 } else {
                     AsetLayout(
                         aset = homeUiState.aset,
-                        onDetailClick = onDetailClick,
-                        onDeleteClick = onDeleteClick
+                        onDeleteClick = onDeleteClick,
+                        onEditClick = onEditClick,
+                        navController = navController
                     )
                 }
             }
@@ -171,8 +180,9 @@ fun OnError(
 fun AsetLayout(
     aset: List<Aset>,
     modifier: Modifier = Modifier,
-    onDetailClick: (Aset) -> Unit,
     onDeleteClick: (Aset) -> Unit = {},
+    onEditClick: (Aset) -> Unit,
+    navController: NavController
 ) {
     Log.d("AsetLayout", "Total Aset: ${aset.size}")
     LazyColumn(
@@ -184,11 +194,12 @@ fun AsetLayout(
             AsetCard(
                 aset = ast,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onDetailClick(ast) },
+                    .fillMaxWidth(),
                 onDeleteClick = {
                     onDeleteClick(ast)
-                }
+                },
+                onEditClick = onEditClick,
+                navController = navController
             )
         }
     }
@@ -198,34 +209,43 @@ fun AsetLayout(
 fun AsetCard(
     aset: Aset,
     modifier: Modifier = Modifier,
-    onDeleteClick: (Aset) -> Unit = {}
+    navController: NavController,
+    onDeleteClick: (Aset) -> Unit = {},
+    onEditClick: (Aset) -> Unit = {} // Tambahkan parameter untuk edit
 ) {
-    Card (
+    Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Column (
+        Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text (
+                Text(
                     text = aset.id_aset,
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(Modifier.weight(1f))
-                IconButton(onClick = {onDeleteClick(aset)}) {
+                // Tambahkan IconButton Edit
+                IconButton(onClick = { onEditClick(aset) }) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit Asset",
+                    )
+                }
+                IconButton(onClick = { onDeleteClick(aset) }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = null,
+                        contentDescription = "Delete Asset",
                     )
                 }
             }
-            Text (
+            Text(
                 text = aset.nama_aset,
                 style = MaterialTheme.typography.titleMedium,
             )

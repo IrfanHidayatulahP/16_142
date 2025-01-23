@@ -6,6 +6,7 @@ import com.example.finalprojectpam.service_api.AsetApiService
 
 interface AsetRepository {
     suspend fun getAset() : List<Aset>
+    suspend fun detailAset(id_aset: String): Aset
     suspend fun insertAset(aset: Aset)
     suspend fun updateAset(id_aset: String, aset: Aset)
     suspend fun deleteAset(id_aset: String)
@@ -18,6 +19,10 @@ class NetworkAsetRepository (
         val asetList = asetApiService.getAset()
         Log.d("AsetRepository", "Received Aset: $asetList")
         return asetList
+    }
+
+    override suspend fun detailAset(id_aset: String): Aset {
+        return asetApiService.detailAset(id_aset)
     }
 
     override suspend fun insertAset(aset: Aset) {

@@ -4,46 +4,76 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
+    <!-- Home Fragment -->
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.finalprojectpam.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
+    <!-- Asset Fragment -->
     <fragment
         android:id="@+id/navigation_asset"
         android:name="com.example.finalprojectpam.ui.asset.AssetFragment"
         android:label="@string/title_asset"
         tools:layout="@layout/fragment_asset">
+        <!-- Action to insert asset -->
         <action
             android:id="@+id/action_asset_to_insert"
             app:destination="@+id/navigation_insert" />
+        <!-- Action to update asset -->
+        <action
+            android:id="@+id/action_asset_to_update"
+            app:destination="@id/navigation_edit">
+            <!-- Argument for id_aset -->
+            <argument
+                android:name="id_aset"
+                app:argType="string" />
+        </action>
     </fragment>
 
+    <!-- Update Asset Fragment -->
+    <fragment
+        android:id="@+id/navigation_edit"
+        android:name="com.example.finalprojectpam.ui.asset.UpdateFragment"
+        android:label="@string/edit_asset"
+        tools:layout="@layout/fragment_edit_aset">
+        <!-- Argument for id_aset -->
+        <argument
+            android:name="id_aset"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Insert Asset Fragment -->
     <fragment
         android:id="@+id/navigation_insert"
         android:name="com.example.finalprojectpam.ui.asset.InsertFragment"
         tools:layout="@layout/fragment_insert_aset">
+        <!-- Action to go back to Asset Fragment -->
         <action
             android:id="@+id/action_insert_to_asset"
             app:destination="@+id/navigation_asset" />
     </fragment>
 
+    <!-- Kategori Fragment -->
     <fragment
         android:id="@+id/navigation_kategori"
         android:name="com.example.finalprojectpam.ui.kategori.KategoriFragment"
         android:label="@string/title_kategori"
         tools:layout="@layout/fragment_kategori" />
 
+    <!-- Pendapatan Fragment -->
     <fragment
         android:id="@+id/navigation_pendapatan"
         android:name="com.example.finalprojectpam.ui.pendapatan.PendapatanFragment"
         android:label="@string/title_pendapatan"
         tools:layout="@layout/fragment_pendapatan" />
 
+    <!-- Pengeluaran Fragment -->
     <fragment
         android:id="@+id/navigation_pengeluaran"
         android:name="com.example.finalprojectpam.ui.pengeluaran.PengeluaranFragment"
         android:label="@string/title_pengeluaran"
         tools:layout="@layout/fragment_pengeluaran" />
+
 </navigation>

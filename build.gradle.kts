@@ -10,7 +10,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath ("com.android.tools.build:gradle:8.1.1") // Sesuaikan dengan versi terbaru
-        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10") // Jika menggunakan Kotlin
+        classpath("com.android.tools.build:gradle:8.1.1") // Sesuaikan dengan versi terbaru dari Android Gradle Plugin
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10") // Jika menggunakan Kotlin
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.2") // Untuk Safe Args Navigation
     }
 }

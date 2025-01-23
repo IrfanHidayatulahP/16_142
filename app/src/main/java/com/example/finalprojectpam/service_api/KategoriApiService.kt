@@ -18,6 +18,9 @@ interface KategoriApiService {
     @GET("bacakategori.php")
     suspend fun getKategori(): List<Kategori>
 
+    @GET("detailkategori/{id_kategori}")
+    suspend fun detailKategori(@Query("id_kategori")id_kategori: String) : Kategori
+
     @POST("insertkategori.php")
     suspend fun insertKategori(@Body kategori: Kategori)
 

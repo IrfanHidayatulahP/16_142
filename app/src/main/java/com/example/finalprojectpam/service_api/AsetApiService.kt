@@ -18,6 +18,9 @@ interface AsetApiService {
     @GET("bacaaset.php")
     suspend fun getAset() : List<Aset>
 
+    @GET("detailaset.php/{id_aset}")
+    suspend fun detailAset(@Query("id_aset")id_aset: String) : Aset
+
     @POST("insertaset.php")
     suspend fun insertAset(@Body aset: Aset)
 

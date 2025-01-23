@@ -5,6 +5,7 @@ import com.example.finalprojectpam.service_api.KategoriApiService
 
 interface KategoriRepository {
     suspend fun getKategori(): List<Kategori>
+    suspend fun detailKategori(id_kategori: String) : Kategori
     suspend fun insertKategori(kategori: Kategori)
     suspend fun updateKategori(id_kategori: String, kategori: Kategori)
     suspend fun deleteKategori(id_kategori: String)
@@ -15,6 +16,10 @@ class NetworkKategoriRepository(
 ) : KategoriRepository {
     override suspend fun getKategori(): List<Kategori> =
         kategoriApiService.getKategori()
+
+    override suspend fun detailKategori(id_kategori: String): Kategori {
+        return kategoriApiService.detailKategori(id_kategori)
+    }
 
     override suspend fun insertKategori(kategori: Kategori) {
         kategoriApiService.insertKategori(kategori)
