@@ -20,6 +20,7 @@ class InsertKategoriViewModel(private val kat : KategoriRepository) : ViewModel(
         viewModelScope.launch {
             try {
                 kat.insertKategori(uiState.insertUiEvent.toKategori())
+                kat.getKategori()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
