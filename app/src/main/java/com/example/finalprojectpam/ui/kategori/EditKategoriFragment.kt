@@ -75,12 +75,14 @@ fun EditKategoriScreen(
     viewModel: EditKategoriViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val updateUiState by viewModel.editKategoriState.collectAsState()
-    val asetData by viewModel.kategoriData.collectAsState()
+    val kategoriData by viewModel.kategoriData.collectAsState()
 
     var nama_kategori by remember { mutableStateOf("") }
 
-    if (updateUiState is EditKategoriState.DataLoaded) {
-        nama_kategori = (updateUiState as EditKategoriState.DataLoaded).kategori.nama_kategori
+    LaunchedEffect(updateUiState) {
+        if (updateUiState is EditKategoriState.DataLoaded) {
+            nama_kategori = (updateUiState as EditKategoriState.DataLoaded).kategori.id_kategori
+        }
     }
 
     Scaffold { paddingValues ->
@@ -118,9 +120,8 @@ fun EditKategoriScreen(
                 // Navigasi ke Menu Kategori saat update berhasil
                 when (updateUiState) {
                     is EditKategoriState.Success -> {
-                        LaunchedEffect (Unit) {
-                            onNavigateToMenu()
-                        }
+                        LaunchedEffect(Unit) {
+                            onNavigateToMenu() }
                         Text("Data Berhasil diperbarui!", color = MaterialTheme.colorScheme.primary)
                     }
                     is EditKategoriState.Error -> {

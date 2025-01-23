@@ -76,6 +76,10 @@ class KategoriFragment : Fragment() {
             }
         }
     }
+    override fun onResume() {
+        super.onResume()
+        viewModel.getKategori() // Refresh data setiap kali fragment ditampilkan ulang
+    }
 }
 
 @Composable
