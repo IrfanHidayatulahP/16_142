@@ -65,6 +65,14 @@
         <action
             android:id="@+id/action_kategori_to_insert"
             app:destination="@+id/navigation_insert_kategori" />
+        <action
+            android:id="@+id/action_kategori_to_update"
+            app:destination="@id/navigation_edit_kategori">
+            <!-- Argument for id_aset -->
+            <argument
+                android:name="id_kategori"
+                app:argType="string" />
+        </action>
     </fragment>
 
     <!-- Insert Kategori Fragment -->
@@ -76,6 +84,18 @@
         <action
             android:id="@+id/action_insert_to_kategori"
             app:destination="@+id/navigation_kategori" />
+    </fragment>
+
+    <!-- Update Kategori Fragment -->
+    <fragment
+        android:id="@+id/navigation_edit_kategori"
+        android:name="com.example.finalprojectpam.ui.kategori.EditKategoriFragment"
+        android:label="@string/edit_kategori"
+        tools:layout="@layout/fragment_edit_kategori">
+        <!-- Argument for id_kategori -->
+        <argument
+            android:name="id_kategori"
+            app:argType="string" />
     </fragment>
 
     <!-- Pendapatan Fragment -->

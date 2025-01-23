@@ -9,6 +9,7 @@ import com.example.finalprojectpam.DependenciesInjection.PencatatanApplication
 import com.example.finalprojectpam.ui.asset.AssetViewModel
 import com.example.finalprojectpam.ui.asset.InsertAssetViewModel
 import com.example.finalprojectpam.ui.asset.UpdateAssetViewModel
+import com.example.finalprojectpam.ui.kategori.EditKategoriViewModel
 import com.example.finalprojectpam.ui.kategori.InsertKategoriViewModel
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
@@ -43,6 +44,15 @@ object PenyediaViewModel {
 
         initializer {
             InsertKategoriViewModel(pencatatanApplication().container.kategoriRepository)
+        }
+        initializer {
+            val savedStateHandle = createSavedStateHandle()
+            val id_kategori = savedStateHandle.get<String>("id_kategori")
+                ?: throw IllegalArgumentException("ID is Required")
+            EditKategoriViewModel(
+                pencatatanApplication().container.kategoriRepository,
+                id_kategori
+            )
         }
     }
 }

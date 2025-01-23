@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,8 +40,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
+import com.example.finalprojectpam.model.Aset
 import com.example.finalprojectpam.model.Kategori
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
 
@@ -62,10 +65,12 @@ class KategoriFragment : Fragment() {
                         navigateToItemEntry = {
                             findNavController().navigate(R.id.action_kategori_to_insert)
                         },
-                        onDetailClick = {
-                            // Handle detail click
+                        onEditClick = { kategori ->
+                            val action = KategoriFragmentDirections.actionKategoriToUpdate(kategori.id_kategori)
+                            findNavController().navigate(action)
                         },
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        navController = findNavController()
                     )
                 }
             }
@@ -77,7 +82,8 @@ class KategoriFragment : Fragment() {
 fun HomeKategori(
     navigateToItemEntry: () -> Unit,
     modifier: Modifier = Modifier,
-    onDetailClick: (Kategori) -> Unit = {},
+    navController: NavController,
+    onEditClick: (Kategori) -> Unit = {},
     viewModel: KategoriViewModel
 ) {
     Scaffold(
@@ -96,10 +102,11 @@ fun HomeKategori(
             katUiState = viewModel.katUiState,
             retryAction = { viewModel.getKategori() },
             modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailClick,
+            onEditClick = onEditClick,
             onDeleteClick = { kat ->
                 viewModel.deleteKategori(kat.id_kategori)
-            }
+            },
+            navController = navController
         )
     }
 }
@@ -109,8 +116,9 @@ fun KatStatus(
     katUiState: KatUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
+    navController: NavController,
     onDeleteClick: (Kategori) -> Unit = {},
-    onDetailClick: (Kategori) -> Unit
+    onEditClick: (Kategori) -> Unit
 ) {
     when (katUiState) {
         is KatUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
@@ -124,8 +132,9 @@ fun KatStatus(
                 } else {
                     KategoriLayout(
                         kategori = katUiState.kategori,
-                        onDetailClick = onDetailClick,
-                        onDeleteClick = onDeleteClick
+                        onDeleteClick = onDeleteClick,
+                        onEditClick = onEditClick,
+                        navController = navController
                     )
                 }
             }
@@ -170,8 +179,9 @@ fun OnError(
 fun KategoriLayout(
     kategori: List<Kategori>,
     modifier: Modifier = Modifier,
-    onDetailClick: (Kategori) -> Unit,
     onDeleteClick: (Kategori) -> Unit = {},
+    onEditClick: (Kategori) -> Unit,
+    navController: NavController
 ) {
     LazyColumn(
         modifier = modifier,
@@ -182,11 +192,12 @@ fun KategoriLayout(
             KategoriCard(
                 kategori = kat,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onDetailClick(kat) },
+                    .fillMaxWidth(),
                 onDeleteClick = {
                     onDeleteClick(kat)
-                }
+                },
+                onEditClick = onEditClick,
+                navController = navController
             )
         }
     }
@@ -196,6 +207,8 @@ fun KategoriLayout(
 fun KategoriCard(
     kategori: Kategori,
     modifier: Modifier = Modifier,
+    navController: NavController,
+    onEditClick: (Kategori) -> Unit = {},
     onDeleteClick: (Kategori) -> Unit = {}
 ) {
     Card (
@@ -216,6 +229,12 @@ fun KategoriCard(
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(Modifier.weight(1f))
+                IconButton(onClick = { onEditClick(kategori) }) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit Kategori",
+                    )
+                }
                 IconButton(onClick = {onDeleteClick(kategori)}) {
                     Icon(
                         imageVector = Icons.Default.Delete,

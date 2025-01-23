@@ -46,8 +46,8 @@ class EditKategoriFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val idKategori: String = arguments?.getString("id_aset")
-            ?: throw IllegalStateException("id_aset diperlukan")
+        val idKategori: String = arguments?.getString("id_kategori")
+            ?: throw IllegalStateException("id_kategori diperlukan")
 
         viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(EditKategoriViewModel::class.java)
 
@@ -65,7 +65,7 @@ class EditKategoriFragment : Fragment() {
 
     private fun navigateToAssetFragment() {
         // Navigasi menggunakan NavController
-        findNavController().navigate(R.id.navigation_asset)
+        findNavController().navigate(R.id.navigation_kategori)
     }
 }
 
@@ -80,8 +80,7 @@ fun EditKategoriScreen(
     var nama_kategori by remember { mutableStateOf("") }
 
     if (updateUiState is EditKategoriState.DataLoaded) {
-        val data = (updateUiState as EditKategoriState.DataLoaded).kategori
-        nama_kategori = data.nama_kategori
+        nama_kategori = (updateUiState as EditKategoriState.DataLoaded).kategori.nama_kategori
     }
 
     Scaffold { paddingValues ->
@@ -106,7 +105,7 @@ fun EditKategoriScreen(
                 Button(
                     onClick = {
                         val editKategori = Kategori (
-                            id_kategori = (updateUiState as EditKategoriState.DataLoaded).kategori.id_kategori,
+                            id_kategori = (updateUiState as? EditKategoriState.DataLoaded)?.kategori?.id_kategori ?: "",
                             nama_kategori = nama_kategori
                         )
                         viewModel.updateKategoriDetail(editKategori)
@@ -116,7 +115,7 @@ fun EditKategoriScreen(
                     Text("Simpan Perubahan")
                 }
 
-                // Navigasi ke Menu Aset saat update berhasil
+                // Navigasi ke Menu Kategori saat update berhasil
                 when (updateUiState) {
                     is EditKategoriState.Success -> {
                         LaunchedEffect (Unit) {
