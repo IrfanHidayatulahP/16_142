@@ -12,6 +12,7 @@ import com.example.finalprojectpam.ui.asset.UpdateAssetViewModel
 import com.example.finalprojectpam.ui.kategori.EditKategoriViewModel
 import com.example.finalprojectpam.ui.kategori.InsertKategoriViewModel
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
+import com.example.finalprojectpam.ui.pendapatan.InsertPendapatanViewModel
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
 import com.example.finalprojectpam.ui.pengeluaran.PengeluaranViewModel
 
@@ -19,15 +20,6 @@ object PenyediaViewModel {
     val Factory = viewModelFactory {
         initializer {
             AssetViewModel(pencatatanApplication().container.asetRepository)
-        }
-        initializer {
-            KategoriViewModel(pencatatanApplication().container.kategoriRepository)
-        }
-        initializer {
-            PendapatanViewModel(pencatatanApplication().container.pendapatanRepository)
-        }
-        initializer {
-            PengeluaranViewModel(pencatatanApplication().container.pengeluaranRepository)
         }
         initializer {
             InsertAssetViewModel(pencatatanApplication().container.asetRepository)
@@ -43,6 +35,9 @@ object PenyediaViewModel {
         }
 
         initializer {
+            KategoriViewModel(pencatatanApplication().container.kategoriRepository)
+        }
+        initializer {
             InsertKategoriViewModel(pencatatanApplication().container.kategoriRepository)
         }
         initializer {
@@ -53,6 +48,17 @@ object PenyediaViewModel {
                 pencatatanApplication().container.kategoriRepository,
                 id_kategori
             )
+        }
+
+        initializer {
+            PendapatanViewModel(pencatatanApplication().container.pendapatanRepository)
+        }
+        initializer {
+            InsertPendapatanViewModel(pencatatanApplication().container.pendapatanRepository)
+        }
+
+        initializer {
+            PengeluaranViewModel(pencatatanApplication().container.pengeluaranRepository)
         }
     }
 }
