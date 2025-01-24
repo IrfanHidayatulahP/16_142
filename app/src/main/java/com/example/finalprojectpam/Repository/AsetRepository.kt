@@ -17,7 +17,6 @@ class NetworkAsetRepository (
 ) : AsetRepository {
     override suspend fun getAset(): List<Aset> {
         val asetList = asetApiService.getAset()
-        Log.d("AsetRepository", "Received Aset: $asetList")
         return asetList
     }
 

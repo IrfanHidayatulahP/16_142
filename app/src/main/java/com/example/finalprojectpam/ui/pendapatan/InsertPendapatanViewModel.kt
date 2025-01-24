@@ -10,6 +10,7 @@ import com.example.finalprojectpam.model.Pendapatan
 import kotlinx.coroutines.launch
 
 class InsertPendapatanViewModel(private val dapat : PendapatanRepository) :ViewModel() {
+
     var dapatState by mutableStateOf(InsertDapatState())
 
     fun updateInsertDapatState(insertDapatEvent: InsertDapatEvent) {
