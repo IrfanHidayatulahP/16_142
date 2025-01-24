@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
 import com.example.finalprojectpam.model.Pendapatan
@@ -61,10 +62,12 @@ class PendapatanFragment : Fragment() {
                         navigateToItemEntry = {
                             findNavController().navigate(R.id.action_pendapatan_to_insert)
                         },
-                        onDetailClick = {
-                            // Handle detail click
+                        onDetailClick = { dapat ->
+                            val action = PendapatanFragmentDirections.actionPendapatanToDetail(dapat.id_pendapatan)
+                            findNavController().navigate(action)
                         },
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        navController = findNavController()
                     )
                 }
             }
@@ -80,6 +83,7 @@ class PendapatanFragment : Fragment() {
 fun HomePendapatan(
     navigateToItemEntry: () -> Unit,
     modifier: Modifier = Modifier,
+    navController: NavController,
     onDetailClick: (Pendapatan) -> Unit = {},
     viewModel: PendapatanViewModel
 ) {
@@ -99,6 +103,7 @@ fun HomePendapatan(
             dapatUiState = viewModel.dapatUiState,
             retryAction = { viewModel.getPendapatan() },
             modifier = Modifier.padding(innerPadding),
+            navController = navController,
             onDetailClick = onDetailClick,
             onDeleteClick = { dapat ->
                 viewModel.deletePendapatan(dapat.id_pendapatan)
@@ -112,6 +117,7 @@ fun DapatStatus(
     dapatUiState: DapatUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
+    navController: NavController,
     onDeleteClick: (Pendapatan) -> Unit = {},
     onDetailClick: (Pendapatan) -> Unit
 ) {
@@ -128,7 +134,8 @@ fun DapatStatus(
                     PendapatanLayout(
                         pendapatan = dapatUiState.dapat,
                         onDetailClick = onDetailClick,
-                        onDeleteClick = onDeleteClick
+                        onDeleteClick = onDeleteClick,
+                        navController = navController
                     )
                 }
             }
@@ -175,6 +182,7 @@ fun PendapatanLayout(
     modifier: Modifier = Modifier,
     onDetailClick: (Pendapatan) -> Unit,
     onDeleteClick: (Pendapatan) -> Unit = {},
+    navController: NavController
 ) {
     LazyColumn(
         modifier = modifier,
@@ -189,7 +197,8 @@ fun PendapatanLayout(
                     .clickable { onDetailClick(dapat) },
                 onDeleteClick = {
                     onDeleteClick(dapat)
-                }
+                },
+                navController = navController
             )
         }
     }
@@ -199,6 +208,7 @@ fun PendapatanLayout(
 fun PendapatanCard(
     pendapatan: Pendapatan,
     modifier: Modifier = Modifier,
+    navController: NavController,
     onDeleteClick: (Pendapatan) -> Unit = {}
 ) {
     Card (

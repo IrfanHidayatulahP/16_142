@@ -102,9 +102,17 @@
         android:name="com.example.finalprojectpam.ui.pendapatan.PendapatanFragment"
         android:label="@string/title_pendapatan"
         tools:layout="@layout/fragment_pendapatan">
-    <action
-        android:id="@+id/action_pendapatan_to_insert"
-        app:destination="@+id/navigation_insert_pendapatan" />
+        <action
+            android:id="@+id/action_pendapatan_to_insert"
+            app:destination="@+id/navigation_insert_pendapatan" />
+        <action
+            android:id="@+id/action_pendapatan_to_detail"
+            app:destination="@id/navigation_detail_pendapatan">
+            <!-- Argument for id_pendapatan -->
+            <argument
+                android:name="id_pendapatan"
+                app:argType="string" />
+        </action>
     </fragment>
     <!-- Insert Pendapatan Fragment -->
     <fragment
@@ -114,6 +122,16 @@
         <!-- Action to go back to Asset Fragment -->
         <action
             android:id="@+id/action_insert_to_pendapatan"
+            app:destination="@+id/navigation_pendapatan" />
+    </fragment>
+    <!-- Detail Pendapatan Fragment -->
+    <fragment
+        android:id="@+id/navigation_detail_pendapatan"
+        android:name="com.example.finalprojectpam.ui.pendapatan.DetailPendapatanFragment"
+        tools:layout="@layout/fragment_detail_pendapatan">
+        <!-- Action to go back to Asset Fragment -->
+        <action
+            android:id="@+id/action_detail_to_pendapatan"
             app:destination="@+id/navigation_pendapatan" />
     </fragment>
 

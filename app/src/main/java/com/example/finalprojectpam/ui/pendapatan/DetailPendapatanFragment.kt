@@ -1,5 +1,9 @@
 package com.example.finalprojectpam.ui.pendapatan
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,12 +29,46 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.fragment.findNavController
+import com.example.finalprojectpam.R
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
 
 class DetailPendapatanFragment : Fragment() {
+
+    private lateinit var viewModel: DetailPendapatanViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(DetailPendapatanViewModel::class.java)
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MaterialTheme {
+                    DetailScreen(
+                        onNavigateBack = { navigateToPendapatanFragment() },
+                        onEditClick = { },
+                        onDeleteSuccess = { },
+                        idPendapatan = toString(),
+                        viewModel = viewModel
+                    )
+                }
+            }
+        }
+    }
+
+    private fun navigateToPendapatanFragment() {
+        // Navigasi menggunakan NavController
+        findNavController().navigate(R.id.navigation_pendapatan)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -23,6 +23,13 @@ class DetailPendapatanViewModel(
         MutableStateFlow<DetailPendapatanState>(DetailPendapatanState.Loading)
     val detailPendapatanState: StateFlow<DetailPendapatanState> get() = _detailPendapatanState
 
+    init {
+        if (idPendapatan.isEmpty()){
+            throw IllegalArgumentException("ID is Required")
+        }
+        getDetailPendapatan()
+    }
+
     private fun getDetailPendapatan() {
         viewModelScope.launch {
             _detailPendapatanState.value = DetailPendapatanState.Loading
