@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,17 +48,23 @@ class DetailPendapatanFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val idPendapatan: String? = arguments?.getString("id_pendapatan")
+        if (idPendapatan.isNullOrEmpty()) {
+            findNavController().popBackStack()
+            return null
+        }
 
-        viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(DetailPendapatanViewModel::class.java)
+        viewModel = ViewModelProvider(this, PenyediaViewModel.Factory)
+            .get(DetailPendapatanViewModel::class.java)
 
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme {
                     DetailScreen(
                         onNavigateBack = { navigateToPendapatanFragment() },
-                        onEditClick = { },
-                        onDeleteSuccess = { },
-                        idPendapatan = toString(),
+                        onEditClick = { navigateToEditPendapatanFragment(idPendapatan) },
+                        onDeleteSuccess = { navigateToPendapatanFragment() },
+                        idPendapatan = idPendapatan,
                         viewModel = viewModel
                     )
                 }
@@ -69,9 +76,15 @@ class DetailPendapatanFragment : Fragment() {
         // Navigasi menggunakan NavController
         findNavController().navigate(R.id.navigation_pendapatan)
     }
+
+    private fun navigateToEditPendapatanFragment(idPendapatan: String) {
+        val bundle = Bundle().apply {
+            putString("id_pendapatan", idPendapatan)
+        }
+        findNavController().navigate(R.id.navigation_edit_pendapatan, bundle)
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     idPendapatan: String,
@@ -115,7 +128,9 @@ fun DetailScreen(
 
                     // Tombol Edit
                     Button(
-                        onClick = onEditClick,
+                        onClick = {
+                            onEditClick()
+                        },
                         shape = MaterialTheme.shapes.small,
                         modifier = Modifier.fillMaxWidth()
                     ) {

@@ -1,5 +1,6 @@
 package com.example.finalprojectpam.model
 
+import com.example.finalprojectpam.ui.pendapatan.EditDapatState
 import kotlinx.serialization.Serializable
 
 @Serializable

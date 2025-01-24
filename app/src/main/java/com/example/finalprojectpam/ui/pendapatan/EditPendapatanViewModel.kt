@@ -1,5 +1,6 @@
 package com.example.finalprojectpam.ui.pendapatan
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalprojectpam.Repository.PendapatanRepository
@@ -8,16 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-
 sealed class EditDapatState {
-    data class DataLoaded(val pendapatan: Pendapatan) : EditDapatState()
     object Loading : EditDapatState()
-    object Error : EditDapatState()
     object Success : EditDapatState()
+    object Error : EditDapatState()
+    data class DataLoaded(val pendapatan: Pendapatan) : EditDapatState()
 }
 
 class EditPendapatanViewModel(
-    private val dapat: PendapatanRepository,
+    private val repository: PendapatanRepository,
     private val id_pendapatan: String
 ) : ViewModel() {
 
@@ -27,13 +27,17 @@ class EditPendapatanViewModel(
     private val _pendapatanData = MutableStateFlow<Pendapatan?>(null)
     val pendapatanData: StateFlow<Pendapatan?> get() = _pendapatanData
 
-    private fun loadPendapatanDetail() {
+    init {
+        loadPendapatanDetail(id_pendapatan = id_pendapatan)
+    }
+
+    private fun loadPendapatanDetail(id_pendapatan: String) {
         viewModelScope.launch {
             _editDapatState.value = EditDapatState.Loading
             try {
-                val dapat = dapat.detailPendapatan(id_pendapatan)
-                _pendapatanData.value = dapat
-                _editDapatState.value = EditDapatState.DataLoaded(dapat)
+                val pendapatan = repository.detailPendapatan(id_pendapatan)
+                _pendapatanData.value = pendapatan
+                _editDapatState.value = EditDapatState.DataLoaded(pendapatan)
             } catch (e: Exception) {
                 _editDapatState.value = EditDapatState.Error
             }
@@ -44,7 +48,7 @@ class EditPendapatanViewModel(
         viewModelScope.launch {
             _editDapatState.value = EditDapatState.Loading
             try {
-                dapat.updatePendapatan(id_pendapatan, updatedPendapatan)
+                repository.updatePendapatan(id_pendapatan, updatedPendapatan)
                 _editDapatState.value = EditDapatState.Success
             } catch (e: Exception) {
                 _editDapatState.value = EditDapatState.Error
@@ -52,4 +56,3 @@ class EditPendapatanViewModel(
         }
     }
 }
-

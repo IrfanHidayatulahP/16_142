@@ -13,6 +13,7 @@ import com.example.finalprojectpam.ui.kategori.EditKategoriViewModel
 import com.example.finalprojectpam.ui.kategori.InsertKategoriViewModel
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
 import com.example.finalprojectpam.ui.pendapatan.DetailPendapatanViewModel
+import com.example.finalprojectpam.ui.pendapatan.EditPendapatanViewModel
 import com.example.finalprojectpam.ui.pendapatan.InsertPendapatanViewModel
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
 import com.example.finalprojectpam.ui.pengeluaran.PengeluaranViewModel
@@ -62,6 +63,15 @@ object PenyediaViewModel {
             val id_pendapatan = savedStateHandle.get<String>("id_pendapatan")
                 ?: throw IllegalArgumentException("ID is Required")
             DetailPendapatanViewModel(
+                pencatatanApplication().container.pendapatanRepository,
+                idPendapatan = id_pendapatan
+            )
+        }
+        initializer {
+            val savedStateHandle = createSavedStateHandle()
+            val id_pendapatan = savedStateHandle.get<String>("id_pendapatan")
+                ?: throw IllegalArgumentException("ID is Required")
+            EditPendapatanViewModel(
                 pencatatanApplication().container.pendapatanRepository,
                 id_pendapatan
             )
