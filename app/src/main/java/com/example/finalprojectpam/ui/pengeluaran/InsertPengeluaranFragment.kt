@@ -1,5 +1,8 @@
-package com.example.finalprojectpam.ui.pendapatan
+package com.example.finalprojectpam.ui.pengeluaran
 
+import com.example.finalprojectpam.ui.pendapatan.InsertDapatEvent
+import com.example.finalprojectpam.ui.pendapatan.InsertDapatState
+import com.example.finalprojectpam.ui.pendapatan.InsertPendapatanViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +50,7 @@ import kotlinx.coroutines.launch
 
 class InsertPendapatanFragment : Fragment() {
 
-    private lateinit var viewModel: InsertPendapatanViewModel
+    private lateinit var viewModel: InsertPengeluaranViewModel
     private lateinit var assetViewModel: AssetViewModel
     private lateinit var ktgViewModel: KategoriViewModel
 
@@ -57,7 +60,7 @@ class InsertPendapatanFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Using the custom factory to create the InsertKategoriViewModel
-        viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(InsertPendapatanViewModel::class.java)
+        viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(InsertPengeluaranViewModel::class.java)
         assetViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(AssetViewModel::class.java)
         ktgViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(KategoriViewModel::class.java)
 
@@ -86,7 +89,7 @@ class InsertPendapatanFragment : Fragment() {
 fun EntryPendapatanScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InsertPendapatanViewModel = viewModel(factory = PenyediaViewModel.Factory),
+    viewModel: InsertPengeluaranViewModel = viewModel(factory = PenyediaViewModel.Factory),
     assetViewModel: AssetViewModel,
     ktgViewModel: KategoriViewModel
 ) {
@@ -97,10 +100,10 @@ fun EntryPendapatanScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
         EntryBody(
-            insertDapatState = viewModel.dapatState,
+            insertKeluarState = viewModel.keluarState,
             asetList = (assetViewModel.asetUiState as? HomeUiState.Success)?.aset ?: emptyList(),
             kategoriList = (ktgViewModel.katUiState as? KatUiState.Success)?.kategori ?: emptyList(),
-            onPendapatanValueChange = viewModel::updateInsertDapatState,
+            onPengeluaranValueChange = viewModel::updateInsertKeluarState,
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.insertDapat()
@@ -117,8 +120,8 @@ fun EntryPendapatanScreen(
 
 @Composable
 fun EntryBody(
-    insertDapatState: InsertDapatState,
-    onPendapatanValueChange: (InsertDapatEvent) -> Unit,
+    insertKeluarState: InsertKeluarState,
+    onPengeluaranValueChange: (InsertKeluarEvent) -> Unit,
     asetList: List<Aset>,
     kategoriList: List<Kategori>,
     onSaveClick: () -> Unit,
@@ -129,8 +132,8 @@ fun EntryBody(
         modifier = Modifier.padding(12.dp)
     ) {
         FormInput(
-            insertDapatEvent = insertDapatState.insertDapatEvent,
-            onValueChange = onPendapatanValueChange,
+            insertKeluarEvent = insertKeluarState.insertKeluarEvent,
+            onValueChange = onPengeluaranValueChange,
             asetList = asetList,
             kategoriList = kategoriList,
             modifier = Modifier.fillMaxWidth()
@@ -148,11 +151,11 @@ fun EntryBody(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInput(
-    insertDapatEvent: InsertDapatEvent,
+    insertKeluarEvent: InsertKeluarEvent,
     asetList: List<Aset>,
     kategoriList: List<Kategori>,
     modifier: Modifier = Modifier,
-    onValueChange: (InsertDapatEvent) -> Unit = {},
+    onValueChange: (InsertKeluarEvent) -> Unit = {},
     enabled: Boolean = true
 ) {
     Column (
@@ -189,7 +192,7 @@ fun FormInput(
                         onClick = {
                             selectedAsetName = aset.nama_aset
                             expanded = false
-                            onValueChange(insertDapatEvent.copy(id_aset = aset.id_aset))
+                            onValueChange(insertKeluarEvent.copy(id_aset = aset.id_aset))
                         }
                     )
                 }
@@ -222,7 +225,7 @@ fun FormInput(
                         onClick = {
                             selectedKategoriName = ktg.nama_kategori
                             expanded = false
-                            onValueChange(insertDapatEvent.copy(id_kategori = ktg.id_kategori))
+                            onValueChange(insertKeluarEvent.copy(id_kategori = ktg.id_kategori))
                         }
                     )
                 }
@@ -230,8 +233,8 @@ fun FormInput(
         }
 
         OutlinedTextField(
-            value = insertDapatEvent.tgl_transaksi,
-            onValueChange = {onValueChange(insertDapatEvent.copy(tgl_transaksi = it))},
+            value = insertKeluarEvent.tgl_transaksi,
+            onValueChange = {onValueChange(insertKeluarEvent.copy(tgl_transaksi = it))},
             label = { Text("Tanggal Transaksi") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -239,8 +242,8 @@ fun FormInput(
         )
 
         OutlinedTextField(
-            value = insertDapatEvent.total,
-            onValueChange = {onValueChange(insertDapatEvent.copy(total = it))},
+            value = insertKeluarEvent.total,
+            onValueChange = {onValueChange(insertKeluarEvent.copy(total = it))},
             label = { Text("Total Pendapatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -248,8 +251,8 @@ fun FormInput(
         )
 
         OutlinedTextField(
-            value = insertDapatEvent.catatan,
-            onValueChange = {onValueChange(insertDapatEvent.copy(catatan = it))},
+            value = insertKeluarEvent.catatan,
+            onValueChange = {onValueChange(insertKeluarEvent.copy(catatan = it))},
             label = { Text("Catatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
