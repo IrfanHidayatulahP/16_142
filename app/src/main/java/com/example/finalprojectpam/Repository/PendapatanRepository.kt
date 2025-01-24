@@ -5,6 +5,7 @@ import com.example.finalprojectpam.service_api.PendapatanApiService
 
 interface PendapatanRepository {
     suspend fun getPendapatan(): List<Pendapatan>
+    suspend fun detailPendapatan(id_pendapatan: String) : Pendapatan
     suspend fun insertPendapatan(pendapatan: Pendapatan)
     suspend fun updatePendapatan(id_pendapatan: String, pendapatan: Pendapatan)
     suspend fun deletePendapatan(id_pendapatan: String)
@@ -15,6 +16,10 @@ class NetworkPendapatanRepository(
 ) : PendapatanRepository {
     override suspend fun getPendapatan(): List<Pendapatan> =
         pendapatanApiService.getPendapatan()
+
+    override suspend fun detailPendapatan(id_pendapatan: String): Pendapatan {
+        return pendapatanApiService.detailPendapatan(id_pendapatan)
+    }
 
     override suspend fun insertPendapatan(pendapatan: Pendapatan) {
         pendapatanApiService.insertPendapatan(pendapatan)

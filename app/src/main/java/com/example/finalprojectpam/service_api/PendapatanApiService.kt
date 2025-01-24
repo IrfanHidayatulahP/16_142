@@ -18,8 +18,8 @@ interface PendapatanApiService {
     @GET("bacapendapatan.php")
     suspend fun getPendapatan(): List<Pendapatan>
 
-    @GET("getpendapatan.php")
-    suspend fun getPendapatan(pendapatan: Pendapatan)
+    @GET("detailpendapatan.php/{id_pendapatan}")
+    suspend fun detailPendapatan(@Query("id_pendapatan")id_pendapatan: String) : Pendapatan
 
     @POST("insertpendapatan.php")
     suspend fun insertPendapatan(@Body pendapatan: Pendapatan)
