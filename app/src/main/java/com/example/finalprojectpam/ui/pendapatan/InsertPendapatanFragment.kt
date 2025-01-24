@@ -37,15 +37,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
 import com.example.finalprojectpam.model.Aset
+import com.example.finalprojectpam.model.Kategori
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
 import com.example.finalprojectpam.ui.asset.AssetViewModel
 import com.example.finalprojectpam.ui.asset.HomeUiState
+import com.example.finalprojectpam.ui.kategori.KatUiState
+import com.example.finalprojectpam.ui.kategori.KategoriViewModel
 import kotlinx.coroutines.launch
 
 class InsertPendapatanFragment : Fragment() {
 
     private lateinit var viewModel: InsertPendapatanViewModel
     private lateinit var assetViewModel: AssetViewModel
+    private lateinit var ktgViewModel: KategoriViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +59,7 @@ class InsertPendapatanFragment : Fragment() {
         // Using the custom factory to create the InsertKategoriViewModel
         viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(InsertPendapatanViewModel::class.java)
         assetViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(AssetViewModel::class.java)
+        ktgViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(KategoriViewModel::class.java)
 
         return ComposeView(requireContext()).apply {
             setContent {
@@ -62,7 +67,8 @@ class InsertPendapatanFragment : Fragment() {
                     EntryPendapatanScreen(
                         navigateBack = { navigateToPendapatanFragment() },
                         viewModel = viewModel,
-                        assetViewModel = assetViewModel
+                        assetViewModel = assetViewModel,
+                        ktgViewModel = ktgViewModel
                     )
                 }
             }
@@ -81,7 +87,8 @@ fun EntryPendapatanScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InsertPendapatanViewModel = viewModel(factory = PenyediaViewModel.Factory),
-    assetViewModel: AssetViewModel
+    assetViewModel: AssetViewModel,
+    ktgViewModel: KategoriViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -92,6 +99,7 @@ fun EntryPendapatanScreen(
         EntryBody(
             insertDapatState = viewModel.dapatState,
             asetList = (assetViewModel.asetUiState as? HomeUiState.Success)?.aset ?: emptyList(),
+            kategoriList = (ktgViewModel.katUiState as? KatUiState.Success)?.kategori ?: emptyList(),
             onSiswaValueChange = viewModel::updateInsertDapatState,
             onSaveClick = {
                 coroutineScope.launch {
@@ -112,6 +120,7 @@ fun EntryBody(
     insertDapatState: InsertDapatState,
     onSiswaValueChange: (InsertDapatEvent) -> Unit,
     asetList: List<Aset>,
+    kategoriList: List<Kategori>,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -123,6 +132,7 @@ fun EntryBody(
             insertDapatEvent = insertDapatState.insertDapatEvent,
             onValueChange = onSiswaValueChange,
             asetList = asetList,
+            kategoriList = kategoriList,
             modifier = Modifier.fillMaxWidth()
         )
         Button(
@@ -140,6 +150,7 @@ fun EntryBody(
 fun FormInput(
     insertDapatEvent: InsertDapatEvent,
     asetList: List<Aset>,
+    kategoriList: List<Kategori>,
     modifier: Modifier = Modifier,
     onValueChange: (InsertDapatEvent) -> Unit = {},
     enabled: Boolean = true
@@ -150,6 +161,7 @@ fun FormInput(
     ) {
         var expanded by remember { mutableStateOf(false) }
         var selectedAsetName by remember { mutableStateOf("") }
+        var selectedKategoriName by remember { mutableStateOf("") }
 
         ExposedDropdownMenuBox(
             expanded = expanded,
@@ -184,14 +196,38 @@ fun FormInput(
             }
         }
 
-        OutlinedTextField(
-            value = insertDapatEvent.id_kategori,
-            onValueChange = {onValueChange(insertDapatEvent.copy(id_kategori = it))},
-            label = { Text("Id Kategori") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
+            OutlinedTextField(
+                value = selectedKategoriName,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Nama Kategori") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth(),
+                enabled = enabled
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                kategoriList.forEach { ktg ->
+                    DropdownMenuItem(
+                        text = { Text(ktg.nama_kategori) },
+                        onClick = {
+                            selectedKategoriName = ktg.nama_kategori
+                            expanded = false
+                            onValueChange(insertDapatEvent.copy(id_kategori = ktg.id_kategori))
+                        }
+                    )
+                }
+            }
+        }
 
         OutlinedTextField(
             value = insertDapatEvent.tgl_transaksi,
