@@ -24,9 +24,6 @@ class DetailPendapatanViewModel(
     val detailPendapatanState: StateFlow<DetailPendapatanState> get() = _detailPendapatanState
 
     init {
-        if (idPendapatan.isEmpty()){
-            throw IllegalArgumentException("ID is Required")
-        }
         getDetailPendapatan()
     }
 

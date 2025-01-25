@@ -6,6 +6,7 @@ import com.example.finalprojectpam.service_api.PengeluaranApiService
 interface PengeluaranRepository {
     suspend fun getPengeluaran(): List<Pengeluaran>
     suspend fun insertPengeluaran(pengeluaran: Pengeluaran)
+    suspend fun detailPengeluaran(id_pengeluaran: String) : Pengeluaran
     suspend fun updatePengeluaran(id_pengeluaran: String, pengeluaran: Pengeluaran)
     suspend fun deletePengeluaran(id_pengeluaran: String)
 }
@@ -18,6 +19,10 @@ class NetworkPengeluaranRepository(
 
     override suspend fun insertPengeluaran(pengeluaran: Pengeluaran) {
         pengeluaranApiService.insertPengeluaran(pengeluaran)
+    }
+
+    override suspend fun detailPengeluaran(id_pengeluaran: String): Pengeluaran {
+        return pengeluaranApiService.detailPengeluaran(id_pengeluaran)
     }
 
     override suspend fun updatePengeluaran(id_pengeluaran: String, pengeluaran: Pengeluaran) {

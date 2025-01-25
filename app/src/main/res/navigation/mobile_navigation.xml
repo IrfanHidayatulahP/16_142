@@ -172,6 +172,14 @@
         <action
             android:id="@+id/action_pengeluaran_to_insert"
             app:destination="@+id/navigation_insert_pengeluaran" />
+        <action
+            android:id="@+id/action_pengeluaran_to_detail"
+            app:destination="@id/navigation_detail_pengeluaran">
+            <!-- Argument for id_pengeluaran -->
+            <argument
+                android:name="id_pengeluaran"
+                app:argType="string" />
+        </action>
     <!-- Insert Pengeluaran Fragment -->
     <fragment
         android:id="@+id/navigation_insert_pengeluaran"
@@ -181,6 +189,19 @@
         <action
             android:id="@+id/action_insert_to_pengeluaran"
             app:destination="@+id/navigation_pengeluaran" />
+    </fragment>
+    <!-- Detail Pengeluaran Fragment -->
+    <fragment
+        android:id="@+id/navigation_detail_pengeluaran"
+        android:name="com.example.finalprojectpam.ui.pengeluaran.DetailPengeluaranFragment"
+        tools:layout="@layout/fragment_detail_pengeluaran"
+        android:label="Detail Pengeluaran">
+        <argument
+            android:name="id_pengeluaran"
+            app:argType="string">
+        </argument>
+        <!-- Action to go back to Pendapatan Fragment -->
+
     </fragment>
 
 </navigation>

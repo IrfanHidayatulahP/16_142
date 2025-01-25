@@ -1,5 +1,6 @@
 package com.example.finalprojectpam.service_api
 
+import com.example.finalprojectpam.model.Pendapatan
 import com.example.finalprojectpam.model.Pengeluaran
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,8 +19,8 @@ interface PengeluaranApiService {
     @GET("bacapengeluaran.php")
     suspend fun getPengeluaran(): List<Pengeluaran>
 
-    @GET("getpengeluaran.php")
-    suspend fun getPengeluaran(pengeluaran: Pengeluaran)
+    @GET("detailpengeluaran.php/{id_pengeluaran}")
+    suspend fun detailPengeluaran(@Query("id_pengeluaran")id_pengeluaran: String) : Pengeluaran
 
     @POST("insertpengeluaran.php")
     suspend fun insertPengeluaran(@Body pengeluaran: Pengeluaran)

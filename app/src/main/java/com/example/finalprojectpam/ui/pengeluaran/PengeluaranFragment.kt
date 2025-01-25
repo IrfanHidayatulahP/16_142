@@ -68,8 +68,10 @@ class PengeluaranFragment : Fragment() {
                         navigateToItemEntry = {
                             findNavController().navigate(R.id.action_pengeluaran_to_insert)
                         },
-                        onDetailClick = {
-                            // Handle detail click
+                        onDetailClick = { keluar ->
+                            val action = PengeluaranFragmentDirections
+                                .actionPengeluaranToDetail(keluar.id_pengeluaran)
+                            findNavController().navigate(action)
                         },
                         viewModel = viewModel,
                         navController = findNavController()
