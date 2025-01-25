@@ -169,5 +169,18 @@
         android:name="com.example.finalprojectpam.ui.pengeluaran.PengeluaranFragment"
         android:label="@string/title_pengeluaran"
         tools:layout="@layout/fragment_pengeluaran" />
+        <action
+            android:id="@+id/action_pengeluaran_to_insert"
+            app:destination="@+id/navigation_insert_pengeluaran" />
+    <!-- Insert Pendapatan Fragment -->
+    <fragment
+        android:id="@+id/navigation_insert_pengeluaran"
+        android:name="com.example.finalprojectpam.ui.pengeluaran.InsertPengeluaranFragment"
+        tools:layout="@layout/fragment_insert_pengeluaran">
+        <!-- Action to go back to Asset Fragment -->
+        <action
+            android:id="@+id/action_insert_to_pengeluaran"
+            app:destination="@+id/navigation_pengeluaran" />
+    </fragment>
 
 </navigation>

@@ -16,6 +16,7 @@ import com.example.finalprojectpam.ui.pendapatan.DetailPendapatanViewModel
 import com.example.finalprojectpam.ui.pendapatan.EditPendapatanViewModel
 import com.example.finalprojectpam.ui.pendapatan.InsertPendapatanViewModel
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
+import com.example.finalprojectpam.ui.pengeluaran.InsertPengeluaranViewModel
 import com.example.finalprojectpam.ui.pengeluaran.PengeluaranViewModel
 
 object PenyediaViewModel {
@@ -79,6 +80,9 @@ object PenyediaViewModel {
 
         initializer {
             PengeluaranViewModel(pencatatanApplication().container.pengeluaranRepository)
+        }
+        initializer {
+            InsertPengeluaranViewModel(pencatatanApplication().container.pengeluaranRepository)
         }
     }
 }

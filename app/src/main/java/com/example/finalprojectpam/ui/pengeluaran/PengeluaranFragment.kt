@@ -40,6 +40,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.finalprojectpam.R
 import com.example.finalprojectpam.databinding.FragmentPengeluaranBinding
 import com.example.finalprojectpam.model.Pendapatan
@@ -64,12 +66,13 @@ class PengeluaranFragment : Fragment() {
                 MaterialTheme {
                     HomePengeluaran(
                         navigateToItemEntry = {
-                            // Navigasi ke layar entry aset
+                            findNavController().navigate(R.id.action_pengeluaran_to_insert)
                         },
                         onDetailClick = {
                             // Handle detail click
                         },
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        navController = findNavController()
                     )
                 }
             }
@@ -81,6 +84,7 @@ class PengeluaranFragment : Fragment() {
 fun HomePengeluaran(
     navigateToItemEntry: () -> Unit,
     modifier: Modifier = Modifier,
+    navController: NavController,
     onDetailClick: (Pengeluaran) -> Unit = {},
     viewModel: PengeluaranViewModel
 ) {
@@ -103,7 +107,8 @@ fun HomePengeluaran(
             onDetailClick = onDetailClick,
             onDeleteClick = { keluar ->
                 viewModel.deletePendapatan(keluar.id_pengeluaran)
-            }
+            },
+            navController = navController
         )
     }
 }
@@ -113,6 +118,7 @@ fun KeluarStatus(
     keluarUiState: KeluarUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
+    navController: NavController,
     onDeleteClick: (Pengeluaran) -> Unit = {},
     onDetailClick: (Pengeluaran) -> Unit
 ) {
@@ -129,7 +135,8 @@ fun KeluarStatus(
                     PengeluaranLayout(
                         pengeluaran = keluarUiState.keluar,
                         onDetailClick = onDetailClick,
-                        onDeleteClick = onDeleteClick
+                        onDeleteClick = onDeleteClick,
+                        navController = navController
                     )
                 }
             }
@@ -176,6 +183,7 @@ fun PengeluaranLayout(
     modifier: Modifier = Modifier,
     onDetailClick: (Pengeluaran) -> Unit,
     onDeleteClick: (Pengeluaran) -> Unit = {},
+    navController: NavController
 ) {
     LazyColumn(
         modifier = modifier,
@@ -190,7 +198,8 @@ fun PengeluaranLayout(
                     .clickable { onDetailClick(keluar) },
                 onDeleteClick = {
                     onDeleteClick(keluar)
-                }
+                },
+                navController = navController
             )
         }
     }
@@ -200,6 +209,7 @@ fun PengeluaranLayout(
 fun PengeluaranCard(
     pengeluaran: Pengeluaran,
     modifier: Modifier = Modifier,
+    navController: NavController,
     onDeleteClick: (Pengeluaran) -> Unit = {}
 ) {
     Card (

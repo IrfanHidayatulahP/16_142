@@ -48,7 +48,7 @@ import com.example.finalprojectpam.ui.kategori.KatUiState
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
 import kotlinx.coroutines.launch
 
-class InsertPendapatanFragment : Fragment() {
+class InsertPengeluaranFragment : Fragment() {
 
     private lateinit var viewModel: InsertPengeluaranViewModel
     private lateinit var assetViewModel: AssetViewModel
