@@ -56,7 +56,6 @@ class InsertPendapatanFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Using the custom factory to create the InsertKategoriViewModel
         viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(InsertPendapatanViewModel::class.java)
         assetViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(AssetViewModel::class.java)
         ktgViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(KategoriViewModel::class.java)
@@ -76,7 +75,6 @@ class InsertPendapatanFragment : Fragment() {
     }
 
     private fun navigateToPendapatanFragment() {
-        // Navigasi menggunakan NavController
         findNavController().navigate(R.id.navigation_pendapatan)
     }
 }
@@ -152,27 +150,31 @@ fun FormInput(
     asetList: List<Aset>,
     kategoriList: List<Kategori>,
     modifier: Modifier = Modifier,
-    onValueChange: (InsertDapatEvent) -> Unit = {},
+    onValueChange: (InsertDapatEvent) -> Unit,
     enabled: Boolean = true
 ) {
     Column (
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        var expanded by remember { mutableStateOf(false) }
-        var selectedAsetName by remember { mutableStateOf("") }
-        var selectedKategoriName by remember { mutableStateOf("") }
+        var insertDapatEvent by remember { mutableStateOf(insertDapatEvent) }
+
+        var expandedAset by remember { mutableStateOf(false) }
+        var expandedKategori by remember { mutableStateOf(false) }
+
+        val selectedAset = asetList.find { it.id_aset == insertDapatEvent.id_aset }?.nama_aset ?: "Pilih Aset"
+        val selectedKategori = kategoriList.find { it.id_kategori == insertDapatEvent.id_kategori }?.nama_kategori ?: "Pilih Kategori"
 
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = expandedAset,
+            onExpandedChange = { expandedAset = !expandedAset }
         ) {
             OutlinedTextField(
-                value = selectedAsetName,
+                value = selectedAset,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Nama Aset") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedAset) },
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth(),
@@ -180,16 +182,16 @@ fun FormInput(
             )
 
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = expandedAset,
+                onDismissRequest = { expandedAset = false }
             ) {
                 asetList.forEach { aset ->
                     DropdownMenuItem(
                         text = { Text(aset.nama_aset) },
                         onClick = {
-                            selectedAsetName = aset.nama_aset
-                            expanded = false
-                            onValueChange(insertDapatEvent.copy(id_aset = aset.id_aset))
+                            insertDapatEvent = insertDapatEvent.copy(id_aset = aset.id_aset)
+                            onValueChange(insertDapatEvent)
+                            expandedAset = false
                         }
                     )
                 }
@@ -197,15 +199,15 @@ fun FormInput(
         }
 
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = expandedKategori,
+            onExpandedChange = { expandedKategori = !expandedKategori }
         ) {
             OutlinedTextField(
-                value = selectedKategoriName,
+                value = selectedKategori,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Nama Kategori") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedKategori) },
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth(),
@@ -213,16 +215,16 @@ fun FormInput(
             )
 
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = expandedKategori,
+                onDismissRequest = { expandedKategori = false }
             ) {
                 kategoriList.forEach { ktg ->
                     DropdownMenuItem(
                         text = { Text(ktg.nama_kategori) },
                         onClick = {
-                            selectedKategoriName = ktg.nama_kategori
-                            expanded = false
-                            onValueChange(insertDapatEvent.copy(id_kategori = ktg.id_kategori))
+                            insertDapatEvent = insertDapatEvent.copy(id_kategori = ktg.id_kategori)
+                            onValueChange(insertDapatEvent)
+                            expandedKategori = false
                         }
                     )
                 }
@@ -231,7 +233,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertDapatEvent.tgl_transaksi,
-            onValueChange = {onValueChange(insertDapatEvent.copy(tgl_transaksi = it))},
+            onValueChange = { insertDapatEvent = insertDapatEvent.copy(tgl_transaksi = it) },
             label = { Text("Tanggal Transaksi") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -240,7 +242,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertDapatEvent.total,
-            onValueChange = {onValueChange(insertDapatEvent.copy(total = it))},
+            onValueChange = { insertDapatEvent = insertDapatEvent.copy(total = it)},
             label = { Text("Total Pendapatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -249,7 +251,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertDapatEvent.catatan,
-            onValueChange = {onValueChange(insertDapatEvent.copy(catatan = it))},
+            onValueChange = { insertDapatEvent = insertDapatEvent.copy(catatan = it) },
             label = { Text("Catatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -261,9 +263,5 @@ fun FormInput(
                 modifier = Modifier.padding(12.dp)
             )
         }
-        Divider(
-            thickness = 8.dp,
-            modifier = Modifier.padding(12.dp)
-        )
     }
 }

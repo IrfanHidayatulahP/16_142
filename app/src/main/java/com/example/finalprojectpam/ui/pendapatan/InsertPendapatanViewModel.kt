@@ -12,21 +12,24 @@ import kotlinx.coroutines.launch
 class InsertPendapatanViewModel(private val dapat : PendapatanRepository) :ViewModel() {
 
     var dapatState by mutableStateOf(InsertDapatState())
+        private set
 
     fun updateInsertDapatState(insertDapatEvent: InsertDapatEvent) {
-        dapatState = InsertDapatState(insertDapatEvent = insertDapatEvent)
+        dapatState = dapatState.copy(insertDapatEvent = insertDapatEvent)
     }
 
-    suspend fun insertDapat() {
+    fun insertDapat() {
         viewModelScope.launch {
             try {
-                dapat.insertPendapatan(dapatState.insertDapatEvent.toDapat())
+                val pendapatan = dapatState.insertDapatEvent.toDapat()
+                dapat.insertPendapatan(pendapatan)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 }
+
 
 data class InsertDapatState(
     val insertDapatEvent: InsertDapatEvent = InsertDapatEvent()
@@ -41,20 +44,7 @@ data class InsertDapatEvent(
     val catatan: String = "",
 )
 
-fun InsertDapatEvent.toDapat() : Pendapatan = Pendapatan(
-    id_pendapatan = id_pendapatan,
-    id_aset = id_aset,
-    id_kategori = id_kategori,
-    tgl_transaksi = tgl_transaksi,
-    total = total,
-    catatan = catatan
-)
-
-fun Pendapatan.toUiStateDapat() : InsertDapatState = InsertDapatState(
-    insertDapatEvent = toInsertDapatEvent()
-)
-
-fun Pendapatan.toInsertDapatEvent(): InsertDapatEvent = InsertDapatEvent(
+fun InsertDapatEvent.toDapat(): Pendapatan = Pendapatan(
     id_pendapatan = id_pendapatan,
     id_aset = id_aset,
     id_kategori = id_kategori,

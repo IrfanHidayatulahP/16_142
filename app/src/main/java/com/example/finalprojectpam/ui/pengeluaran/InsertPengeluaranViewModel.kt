@@ -6,11 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalprojectpam.Repository.PengeluaranRepository
-import com.example.finalprojectpam.model.Pendapatan
 import com.example.finalprojectpam.model.Pengeluaran
-import com.example.finalprojectpam.ui.pendapatan.InsertDapatEvent
-import com.example.finalprojectpam.ui.pendapatan.InsertDapatState
-import com.example.finalprojectpam.ui.pendapatan.toInsertDapatEvent
 import kotlinx.coroutines.launch
 
 class InsertPengeluaranViewModel(private val keluar: PengeluaranRepository) : ViewModel() {

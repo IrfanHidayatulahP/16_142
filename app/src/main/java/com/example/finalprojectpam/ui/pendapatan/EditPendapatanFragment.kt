@@ -30,7 +30,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.finalprojectpam.R
 import com.example.finalprojectpam.model.Aset
 import com.example.finalprojectpam.model.Kategori
 import com.example.finalprojectpam.model.Pendapatan
