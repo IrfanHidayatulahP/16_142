@@ -1,8 +1,5 @@
 package com.example.finalprojectpam.ui.pengeluaran
 
-import com.example.finalprojectpam.ui.pendapatan.InsertDapatEvent
-import com.example.finalprojectpam.ui.pendapatan.InsertDapatState
-import com.example.finalprojectpam.ui.pendapatan.InsertPendapatanViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -67,7 +63,7 @@ class InsertPengeluaranFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme {
-                    EntryPendapatanScreen(
+                    EntryPengeluaranScreen(
                         navigateBack = { navigateToPendapatanFragment() },
                         viewModel = viewModel,
                         assetViewModel = assetViewModel,
@@ -80,13 +76,13 @@ class InsertPengeluaranFragment : Fragment() {
 
     private fun navigateToPendapatanFragment() {
         // Navigasi menggunakan NavController
-        findNavController().navigate(R.id.navigation_pendapatan)
+        findNavController().navigate(R.id.navigation_pengeluaran)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EntryPendapatanScreen(
+fun EntryPengeluaranScreen(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: InsertPengeluaranViewModel = viewModel(factory = PenyediaViewModel.Factory),
@@ -106,7 +102,7 @@ fun EntryPendapatanScreen(
             onPengeluaranValueChange = viewModel::updateInsertKeluarState,
             onSaveClick = {
                 coroutineScope.launch {
-                    viewModel.insertDapat()
+                    viewModel.insertKeluar()
                     navigateBack()
                 }
             },
@@ -155,27 +151,31 @@ fun FormInput(
     asetList: List<Aset>,
     kategoriList: List<Kategori>,
     modifier: Modifier = Modifier,
-    onValueChange: (InsertKeluarEvent) -> Unit = {},
+    onValueChange: (InsertKeluarEvent) -> Unit,
     enabled: Boolean = true
 ) {
     Column (
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        var expanded by remember { mutableStateOf(false) }
-        var selectedAsetName by remember { mutableStateOf("") }
-        var selectedKategoriName by remember { mutableStateOf("") }
+        var insertKeluarEvent by remember { mutableStateOf(insertKeluarEvent) }
+
+        var expandedAset by remember { mutableStateOf(false) }
+        var expandedKategori by remember { mutableStateOf(false) }
+
+        val selectedAset = asetList.find { it.id_aset == insertKeluarEvent.id_aset }?.nama_aset ?: "Pilih Aset"
+        val selectedKategori = kategoriList.find { it.id_kategori == insertKeluarEvent.id_kategori }?.nama_kategori ?: "Pilih Kategori"
 
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = expandedAset,
+            onExpandedChange = { expandedAset = !expandedAset }
         ) {
             OutlinedTextField(
-                value = selectedAsetName,
+                value = selectedAset,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Nama Aset") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedAset) },
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth(),
@@ -183,16 +183,16 @@ fun FormInput(
             )
 
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = expandedAset,
+                onDismissRequest = { expandedAset = false }
             ) {
                 asetList.forEach { aset ->
                     DropdownMenuItem(
                         text = { Text(aset.nama_aset) },
                         onClick = {
-                            selectedAsetName = aset.nama_aset
-                            expanded = false
-                            onValueChange(insertKeluarEvent.copy(id_aset = aset.id_aset))
+                            insertKeluarEvent = insertKeluarEvent.copy(id_aset = aset.id_aset)
+                            onValueChange(insertKeluarEvent)
+                            expandedAset = false
                         }
                     )
                 }
@@ -200,15 +200,15 @@ fun FormInput(
         }
 
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = expandedKategori,
+            onExpandedChange = { expandedKategori = !expandedKategori }
         ) {
             OutlinedTextField(
-                value = selectedKategoriName,
+                value = selectedKategori,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Nama Kategori") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedKategori) },
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth(),
@@ -216,16 +216,16 @@ fun FormInput(
             )
 
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = expandedKategori,
+                onDismissRequest = { expandedKategori = false }
             ) {
                 kategoriList.forEach { ktg ->
                     DropdownMenuItem(
                         text = { Text(ktg.nama_kategori) },
                         onClick = {
-                            selectedKategoriName = ktg.nama_kategori
-                            expanded = false
-                            onValueChange(insertKeluarEvent.copy(id_kategori = ktg.id_kategori))
+                            insertKeluarEvent = insertKeluarEvent.copy(id_kategori = ktg.id_kategori)
+                            onValueChange(insertKeluarEvent)
+                            expandedKategori = false
                         }
                     )
                 }
@@ -234,7 +234,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertKeluarEvent.tgl_transaksi,
-            onValueChange = {onValueChange(insertKeluarEvent.copy(tgl_transaksi = it))},
+            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(tgl_transaksi = it) },
             label = { Text("Tanggal Transaksi") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -243,8 +243,8 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertKeluarEvent.total,
-            onValueChange = {onValueChange(insertKeluarEvent.copy(total = it))},
-            label = { Text("Total Pendapatan") },
+            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(total = it) },
+            label = { Text("Total Pengeluaran") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
@@ -252,7 +252,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertKeluarEvent.catatan,
-            onValueChange = {onValueChange(insertKeluarEvent.copy(catatan = it))},
+            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(catatan = it) },
             label = { Text("Catatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -264,9 +264,5 @@ fun FormInput(
                 modifier = Modifier.padding(12.dp)
             )
         }
-        Divider(
-            thickness = 8.dp,
-            modifier = Modifier.padding(12.dp)
-        )
     }
 }

@@ -18,13 +18,13 @@ class InsertPendapatanViewModel(private val dapat : PendapatanRepository) :ViewM
     }
 
     suspend fun insertDapat() {
-            viewModelScope.launch {
-                try {
-                    dapat.insertPendapatan(dapatState.insertDapatEvent.toDapat())
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+        viewModelScope.launch {
+            try {
+                dapat.insertPendapatan(dapatState.insertDapatEvent.toDapat())
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+        }
     }
 }
 

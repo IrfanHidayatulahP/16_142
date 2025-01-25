@@ -1,26 +1,32 @@
 package com.example.finalprojectpam.ui.pengeluaran
 
-import com.example.finalprojectpam.Repository.PengeluaranRepository
-import com.example.finalprojectpam.model.Pengeluaran
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.finalprojectpam.Repository.PengeluaranRepository
+import com.example.finalprojectpam.model.Pendapatan
+import com.example.finalprojectpam.model.Pengeluaran
+import com.example.finalprojectpam.ui.pendapatan.InsertDapatEvent
+import com.example.finalprojectpam.ui.pendapatan.InsertDapatState
+import com.example.finalprojectpam.ui.pendapatan.toInsertDapatEvent
 import kotlinx.coroutines.launch
 
-class InsertPengeluaranViewModel(private val keluar : PengeluaranRepository) :ViewModel() {
+class InsertPengeluaranViewModel(private val keluar: PengeluaranRepository) : ViewModel() {
 
     var keluarState by mutableStateOf(InsertKeluarState())
+        private set
 
     fun updateInsertKeluarState(insertKeluarEvent: InsertKeluarEvent) {
-        keluarState = InsertKeluarState(insertKeluarEvent = insertKeluarEvent)
+        keluarState = keluarState.copy(insertKeluarEvent = insertKeluarEvent)
     }
 
-    suspend fun insertDapat() {
+    fun insertKeluar() {
         viewModelScope.launch {
             try {
-                keluar.insertPengeluaran(keluarState.insertKeluarEvent.toKeluar())
+                val pengeluaran = keluarState.insertKeluarEvent.toKeluar()
+                keluar.insertPengeluaran(pengeluaran)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -41,7 +47,7 @@ data class InsertKeluarEvent(
     val catatan: String = "",
 )
 
-fun InsertKeluarEvent.toKeluar() : Pengeluaran = Pengeluaran(
+fun InsertKeluarEvent.toKeluar(): Pengeluaran = Pengeluaran(
     id_pengeluaran = id_pengeluaran,
     id_aset = id_aset,
     id_kategori = id_kategori,
