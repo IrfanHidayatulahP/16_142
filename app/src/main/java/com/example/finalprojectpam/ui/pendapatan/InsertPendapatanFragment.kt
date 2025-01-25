@@ -157,8 +157,6 @@ fun FormInput(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        var insertDapatEvent by remember { mutableStateOf(insertDapatEvent) }
-
         var expandedAset by remember { mutableStateOf(false) }
         var expandedKategori by remember { mutableStateOf(false) }
 
@@ -189,8 +187,7 @@ fun FormInput(
                     DropdownMenuItem(
                         text = { Text(aset.nama_aset) },
                         onClick = {
-                            insertDapatEvent = insertDapatEvent.copy(id_aset = aset.id_aset)
-                            onValueChange(insertDapatEvent)
+                            onValueChange(insertDapatEvent.copy(id_aset = aset.id_aset))
                             expandedAset = false
                         }
                     )
@@ -222,8 +219,7 @@ fun FormInput(
                     DropdownMenuItem(
                         text = { Text(ktg.nama_kategori) },
                         onClick = {
-                            insertDapatEvent = insertDapatEvent.copy(id_kategori = ktg.id_kategori)
-                            onValueChange(insertDapatEvent)
+                            onValueChange(insertDapatEvent.copy(id_kategori = ktg.id_kategori))
                             expandedKategori = false
                         }
                     )
@@ -233,7 +229,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertDapatEvent.tgl_transaksi,
-            onValueChange = { insertDapatEvent = insertDapatEvent.copy(tgl_transaksi = it) },
+            onValueChange = { onValueChange(insertDapatEvent.copy(tgl_transaksi = it)) },
             label = { Text("Tanggal Transaksi") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -242,7 +238,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertDapatEvent.total,
-            onValueChange = { insertDapatEvent = insertDapatEvent.copy(total = it)},
+            onValueChange = { onValueChange(insertDapatEvent.copy(total = it)) },
             label = { Text("Total Pendapatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -251,12 +247,13 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertDapatEvent.catatan,
-            onValueChange = { insertDapatEvent = insertDapatEvent.copy(catatan = it) },
+            onValueChange = { onValueChange(insertDapatEvent.copy(catatan = it)) },
             label = { Text("Catatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
         )
+
         if (enabled) {
             Text(
                 text = "Isi Semua Data!",
