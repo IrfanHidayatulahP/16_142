@@ -11,12 +11,6 @@ interface SaldoApiService {
         "Accept: application/json",
         "Content-Type: application/json",
     )
-    @GET("getpendapatan.php")
-    suspend fun getPendapatan(): Pendapatan
-
-    @GET("getpengeluaran.php")
-    suspend fun getPengeluaran(): Pengeluaran
-
     @GET("getsaldo.php")
     suspend fun getSaldo(): Saldo
 }
