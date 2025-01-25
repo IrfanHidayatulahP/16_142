@@ -51,16 +51,3 @@ fun InsertKeluarEvent.toKeluar(): Pengeluaran = Pengeluaran(
     total = total,
     catatan = catatan
 )
-
-fun Pengeluaran.toUiStateKeluar() : InsertKeluarState = InsertKeluarState(
-    insertKeluarEvent = toInsertKeluarEvent()
-)
-
-fun Pengeluaran.toInsertKeluarEvent(): InsertKeluarEvent = InsertKeluarEvent(
-    id_pengeluaran = id_pengeluaran,
-    id_aset = id_aset,
-    id_kategori = id_kategori,
-    tgl_transaksi = tgl_transaksi,
-    total = total,
-    catatan = catatan
-)

@@ -55,7 +55,7 @@ class InsertPengeluaranFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Using the custom factory to create the InsertKategoriViewModel
+
         viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(InsertPengeluaranViewModel::class.java)
         assetViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(AssetViewModel::class.java)
         ktgViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(KategoriViewModel::class.java)
@@ -158,7 +158,6 @@ fun FormInput(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        var insertKeluarEvent by remember { mutableStateOf(insertKeluarEvent) }
 
         var expandedAset by remember { mutableStateOf(false) }
         var expandedKategori by remember { mutableStateOf(false) }
@@ -190,8 +189,7 @@ fun FormInput(
                     DropdownMenuItem(
                         text = { Text(aset.nama_aset) },
                         onClick = {
-                            insertKeluarEvent = insertKeluarEvent.copy(id_aset = aset.id_aset)
-                            onValueChange(insertKeluarEvent)
+                            onValueChange(insertKeluarEvent.copy(id_aset = aset.id_aset))
                             expandedAset = false
                         }
                     )
@@ -223,8 +221,7 @@ fun FormInput(
                     DropdownMenuItem(
                         text = { Text(ktg.nama_kategori) },
                         onClick = {
-                            insertKeluarEvent = insertKeluarEvent.copy(id_kategori = ktg.id_kategori)
-                            onValueChange(insertKeluarEvent)
+                            onValueChange(insertKeluarEvent.copy(id_kategori = ktg.id_kategori))
                             expandedKategori = false
                         }
                     )
@@ -234,7 +231,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertKeluarEvent.tgl_transaksi,
-            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(tgl_transaksi = it) },
+            onValueChange = { onValueChange(insertKeluarEvent.copy(tgl_transaksi = it)) },
             label = { Text("Tanggal Transaksi") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -243,7 +240,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertKeluarEvent.total,
-            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(total = it) },
+            onValueChange = { onValueChange(insertKeluarEvent.copy(total = it)) },
             label = { Text("Total Pengeluaran") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -252,7 +249,7 @@ fun FormInput(
 
         OutlinedTextField(
             value = insertKeluarEvent.catatan,
-            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(catatan = it) },
+            onValueChange = { onValueChange(insertKeluarEvent.copy(catatan = it)) },
             label = { Text("Catatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
