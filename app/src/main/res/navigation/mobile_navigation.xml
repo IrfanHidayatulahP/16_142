@@ -200,8 +200,23 @@
             android:name="id_pengeluaran"
             app:argType="string">
         </argument>
-        <!-- Action to go back to Pendapatan Fragment -->
-
+        <action
+            android:id="@+id/action_detail_to_edit"
+            app:destination="@+id/navigation_edit_pengeluaran" />
+    </fragment>
+    <!-- Edit Pengeluaran Fragment -->
+    <fragment
+        android:id="@+id/navigation_edit_pengeluaran"
+        android:name="com.example.finalprojectpam.ui.pengeluaran.EditPengeluaranFragment"
+        tools:layout="@layout/fragment_edit_pengeluaran">
+        <argument
+            android:name="id_pengeluaran"
+            app:argType="string">
+        </argument>
+        <!-- Action to go back to Pengeluaran Fragment -->
+        <action
+            android:id="@+id/action_edit_to_detail_keluar"
+            app:destination="@+id/navigation_detail_pengeluaran" />
     </fragment>
 
 </navigation>

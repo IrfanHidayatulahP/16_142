@@ -81,7 +81,7 @@ class DetailPengeluaranFragment : Fragment() {
         val bundle = Bundle().apply {
             putString("id_pengeluaran", idPengeluaran)
         }
-        findNavController().navigate(R.id.navigation_edit_pendapatan, bundle)
+        findNavController().navigate(R.id.navigation_edit_pengeluaran, bundle)
     }
 }
 
