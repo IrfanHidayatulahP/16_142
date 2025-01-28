@@ -6,20 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -93,23 +98,43 @@ fun EntryPendapatanScreen(
 
     Scaffold (
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { innerPadding ->
-        EntryBody(
-            insertDapatState = viewModel.dapatState,
-            asetList = (assetViewModel.asetUiState as? HomeUiState.Success)?.aset ?: emptyList(),
-            kategoriList = (ktgViewModel.katUiState as? KatUiState.Success)?.kategori ?: emptyList(),
-            onPendapatanValueChange = viewModel::updateInsertDapatState,
-            onSaveClick = {
-                coroutineScope.launch {
-                    viewModel.insertDapat()
-                    navigateBack()
+        topBar = {
+            TopAppBar(
+                title = { Text("Tambah Pendapatan") },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Kembali"
+                        )
+                    }
                 }
-            },
+            )
+        }
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-        )
+        ) {
+            EntryBody(
+                insertDapatState = viewModel.dapatState,
+                asetList = (assetViewModel.asetUiState as? HomeUiState.Success)?.aset ?: emptyList(),
+                kategoriList = (ktgViewModel.katUiState as? KatUiState.Success)?.kategori ?: emptyList(),
+                onPendapatanValueChange = viewModel::updateInsertDapatState,
+                onSaveClick = {
+                    coroutineScope.launch {
+                        viewModel.insertDapat()
+                        navigateBack()
+                    }
+                },
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .weight(1f)
+            )
+        }
     }
 }
 
