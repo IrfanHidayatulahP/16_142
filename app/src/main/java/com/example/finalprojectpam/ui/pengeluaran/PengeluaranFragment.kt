@@ -54,6 +54,7 @@ import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
 import com.example.finalprojectpam.ui.home.HomeViewModel
 import com.example.finalprojectpam.ui.home.SaldoUiState
 import com.example.finalprojectpam.ui.pendapatan.DapatUiState
+import com.example.finalprojectpam.ui.pendapatan.PendapatanFragmentDirections
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
 
 class PengeluaranFragment : Fragment() {
@@ -82,6 +83,10 @@ class PengeluaranFragment : Fragment() {
                             } else {
                                 findNavController().navigate(R.id.action_pengeluaran_to_insert)
                             }
+                        },
+                        onDetailClick = { keluar ->
+                            val action = PengeluaranFragmentDirections.actionPengeluaranToDetail(keluar.id_pengeluaran)
+                            findNavController().navigate(action)
                         },
                         navController = findNavController(),
                         viewModel = viewModel
