@@ -1,5 +1,6 @@
 package com.example.finalprojectpam.ui.pengeluaran
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,14 +8,20 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,18 +39,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.finalprojectpam.model.Aset
 import com.example.finalprojectpam.model.Kategori
-import com.example.finalprojectpam.model.Pendapatan
 import com.example.finalprojectpam.model.Pengeluaran
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
 import com.example.finalprojectpam.ui.asset.AssetViewModel
 import com.example.finalprojectpam.ui.asset.HomeUiState
 import com.example.finalprojectpam.ui.kategori.KatUiState
 import com.example.finalprojectpam.ui.kategori.KategoriViewModel
-import com.example.finalprojectpam.ui.pendapatan.EditDapatState
-import com.example.finalprojectpam.ui.pendapatan.EditPendapatanFragmentArgs
 import com.example.finalprojectpam.ui.pendapatan.EditPendapatanFragmentDirections
-import com.example.finalprojectpam.ui.pendapatan.EditPendapatanViewModel
-import com.example.finalprojectpam.ui.pendapatan.InsertDapatEvent
 
 class EditPengeluaranFragment : Fragment() {
 
@@ -74,12 +76,13 @@ class EditPengeluaranFragment : Fragment() {
             }
         }
     }
-    private fun navigateToDetailPengeluaran(idPendapatan: String) {
-        val action = EditPendapatanFragmentDirections.actionPengeluaranToDetail(idPendapatan)
+    private fun navigateToDetailPengeluaran(idPengeluaran: String) {
+        val action = EditPengeluaranFragmentDirections.actionEditToDetailKeluar(idPengeluaran)
         findNavController().navigate(action)
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormUpdate(
@@ -101,127 +104,141 @@ fun FormUpdate(
     val selectedAset = asetList.find { it.id_aset == insertKeluarEvent.id_aset }?.nama_aset ?: "Pilih Aset"
     val selectedKategori = kategoriList.find { it.id_kategori == insertKeluarEvent.id_kategori }?.nama_kategori ?: "Pilih Kategori"
 
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Edit Pengeluaran") },
+                actions = {
+                    IconButton(onClick = onNavigateToDetail) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Kembali"
+                        )
+                    }
+                }
+            )
+        }
     ) {
-        // Dropdown untuk Aset
-        ExposedDropdownMenuBox(
-            expanded = expandedAset,
-            onExpandedChange = { expandedAset = !expandedAset }
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            OutlinedTextField(
-                value = selectedAset,
-                onValueChange = {},
-                readOnly = true,
-                label = { Text("Nama Aset") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedAset) },
-                modifier = Modifier.menuAnchor().fillMaxWidth(),
-                enabled = enabled
-            )
-
-            ExposedDropdownMenu(
+            // Dropdown untuk Aset
+            ExposedDropdownMenuBox(
                 expanded = expandedAset,
-                onDismissRequest = { expandedAset = false }
+                onExpandedChange = { expandedAset = !expandedAset }
             ) {
-                asetList.forEach { aset ->
-                    DropdownMenuItem(
-                        text = { Text(aset.nama_aset) },
-                        onClick = {
-                            insertKeluarEvent = insertKeluarEvent.copy(id_aset = aset.id_aset)
-                            onValueChange(insertKeluarEvent)
-                            expandedAset = false
-                        }
-                    )
+                OutlinedTextField(
+                    value = selectedAset,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Nama Aset") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedAset) },
+                    modifier = Modifier.menuAnchor().fillMaxWidth(),
+                    enabled = enabled
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedAset,
+                    onDismissRequest = { expandedAset = false }
+                ) {
+                    asetList.forEach { aset ->
+                        DropdownMenuItem(
+                            text = { Text(aset.nama_aset) },
+                            onClick = {
+                                insertKeluarEvent = insertKeluarEvent.copy(id_aset = aset.id_aset)
+                                onValueChange(insertKeluarEvent)
+                                expandedAset = false
+                            }
+                        )
+                    }
                 }
             }
-        }
 
-        // Dropdown untuk Kategori
-        ExposedDropdownMenuBox(
-            expanded = expandedKategori,
-            onExpandedChange = { expandedKategori = !expandedKategori }
-        ) {
+            // Dropdown untuk Kategori
+            ExposedDropdownMenuBox(
+                expanded = expandedKategori,
+                onExpandedChange = { expandedKategori = !expandedKategori }
+            ) {
+                OutlinedTextField(
+                    value = selectedKategori,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Nama Kategori") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedKategori) },
+                    modifier = Modifier.menuAnchor().fillMaxWidth(),
+                    enabled = enabled
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedKategori,
+                    onDismissRequest = { expandedKategori = false }
+                ) {
+                    kategoriList.forEach { kategori ->
+                        DropdownMenuItem(
+                            text = { Text(kategori.nama_kategori) },
+                            onClick = {
+                                insertKeluarEvent = insertKeluarEvent.copy(id_kategori = kategori.id_kategori)
+                                onValueChange(insertKeluarEvent)
+                                expandedKategori = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            // Input Tanggal Transaksi
             OutlinedTextField(
-                value = selectedKategori,
-                onValueChange = {},
-                readOnly = true,
-                label = { Text("Nama Kategori") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedKategori) },
-                modifier = Modifier.menuAnchor().fillMaxWidth(),
-                enabled = enabled
+                value = insertKeluarEvent.tgl_transaksi,
+                onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(tgl_transaksi = it) },
+                label = { Text("Tanggal Transaksi") },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                singleLine = true
             )
 
-            ExposedDropdownMenu(
-                expanded = expandedKategori,
-                onDismissRequest = { expandedKategori = false }
+            // Input Total Pendapatan
+            OutlinedTextField(
+                value = insertKeluarEvent.total,
+                onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(total = it) },
+                label = { Text("Total Pendapatan") },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                singleLine = true
+            )
+
+            // Input Catatan
+            OutlinedTextField(
+                value = insertKeluarEvent.catatan,
+                onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(catatan = it) },
+                label = { Text("Catatan") },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                singleLine = true
+            )
+
+            Button(
+                onClick = {
+                    viewModel.editPengeluaranDetail(
+                        Pengeluaran(
+                            id_pengeluaran = insertKeluarEvent.id_pengeluaran,
+                            id_aset = insertKeluarEvent.id_aset,
+                            id_kategori = insertKeluarEvent.id_kategori,
+                            tgl_transaksi = insertKeluarEvent.tgl_transaksi,
+                            total = insertKeluarEvent.total,
+                            catatan = insertKeluarEvent.catatan
+                        )
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled
             ) {
-                kategoriList.forEach { kategori ->
-                    DropdownMenuItem(
-                        text = { Text(kategori.nama_kategori) },
-                        onClick = {
-                            insertKeluarEvent = insertKeluarEvent.copy(id_kategori = kategori.id_kategori)
-                            onValueChange(insertKeluarEvent)
-                            expandedKategori = false
-                        }
-                    )
-                }
+                Text("Simpan")
             }
-        }
-
-        // Input Tanggal Transaksi
-        OutlinedTextField(
-            value = insertKeluarEvent.tgl_transaksi,
-            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(tgl_transaksi = it) },
-            label = { Text("Tanggal Transaksi") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        // Input Total Pendapatan
-        OutlinedTextField(
-            value = insertKeluarEvent.total,
-            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(total = it) },
-            label = { Text("Total Pendapatan") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        // Input Catatan
-        OutlinedTextField(
-            value = insertKeluarEvent.catatan,
-            onValueChange = { insertKeluarEvent = insertKeluarEvent.copy(catatan = it) },
-            label = { Text("Catatan") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        Button(
-            onClick = {
-                viewModel.editPengeluaranDetail(
-                    Pengeluaran(
-                        id_pengeluaran = insertKeluarEvent.id_pengeluaran,
-                        id_aset = insertKeluarEvent.id_aset,
-                        id_kategori = insertKeluarEvent.id_kategori,
-                        tgl_transaksi = insertKeluarEvent.tgl_transaksi,
-                        total = insertKeluarEvent.total,
-                        catatan = insertKeluarEvent.catatan
-                    )
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled
-        ) {
-            Text("Simpan")
-        }
-
-        // Navigasi setelah update berhasil
-        if (updatedKeluarState is EditKeluarState.Success) {
-            LaunchedEffect(Unit) {
-                onNavigateToDetail()
+            if (updatedKeluarState is EditKeluarState.Success) {
+                LaunchedEffect(Unit) {
+                    onNavigateToDetail()
+                }
             }
         }
     }
