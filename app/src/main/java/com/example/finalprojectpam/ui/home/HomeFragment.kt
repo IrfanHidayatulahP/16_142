@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -71,7 +72,7 @@ fun HomeScreen(
                 LoadingView()
             }
             is SaldoUiState.Success -> {
-                SuccessView(navController, saldo = saldoState.saldo)
+                SuccessView(navController, saldo = saldoState.saldo, viewModel = viewModel)
             }
             is SaldoUiState.Error -> {
                 ErrorView(message = saldoState.message)
@@ -83,6 +84,7 @@ fun HomeScreen(
 @Composable
 fun SuccessView(
     navController: NavController,
+    viewModel: HomeViewModel,
     saldo: Saldo
 ) {
     Column(
@@ -110,10 +112,10 @@ fun SuccessView(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
                     )
-                    IconButton(onClick = { }) {
+                    Button(onClick = { viewModel.getAll() }) {
                         Icon(
-                            imageVector = Icons.Filled.Notifications,
-                            contentDescription = "Notifications"
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh"
                         )
                     }
                 }
