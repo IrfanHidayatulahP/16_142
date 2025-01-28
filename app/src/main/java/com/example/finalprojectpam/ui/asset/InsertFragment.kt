@@ -6,17 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -72,23 +80,42 @@ fun EntryAsetScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    Scaffold (
+    Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { innerPadding ->
-        EntryBody(
-            insertUiState = viewModel.uiState,
-            onAsetValueChange = viewModel::updateInsertAsetState,
-            onSaveClick = {
-                coroutineScope.launch {
-                    viewModel.insertAset()
-                    navigateBack()
+        topBar = {
+            TopAppBar(
+                title = { Text("Tambah Aset") },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Kembali"
+                        )
+                    }
                 }
-            },
+            )
+        }
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-        )
+        ) {
+            EntryBody(
+                insertUiState = viewModel.uiState,
+                onAsetValueChange = viewModel::updateInsertAsetState,
+                onSaveClick = {
+                    coroutineScope.launch {
+                        viewModel.insertAset()
+                        navigateBack()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            )
+        }
     }
 }
 
