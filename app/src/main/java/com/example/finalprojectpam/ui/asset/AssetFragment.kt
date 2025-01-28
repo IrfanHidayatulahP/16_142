@@ -20,17 +20,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,6 +88,7 @@ class AssetFragment : Fragment() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeAset(
     navigateToItemEntry: () -> Unit,
@@ -94,6 +99,19 @@ fun HomeAset(
 ) {
     Scaffold(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text("Data Asset") },
+                actions = {
+                    IconButton(onClick = { viewModel.getAset() }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh"
+                        )
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
@@ -104,16 +122,15 @@ fun HomeAset(
             }
         }
     ) { innerPadding ->
-        HomeStatus(
-            homeUiState = viewModel.asetUiState,
-            retryAction = { viewModel.getAset() },
-            modifier = Modifier.padding(innerPadding),
-            onDeleteClick = { aset ->
-                viewModel.deleteAset(aset.id_aset)
-            },
-            onEditClick = onEditClick,
-            navController = navController
-        )
+        Box(modifier = Modifier.padding(innerPadding)) {
+            HomeStatus(
+                homeUiState = viewModel.asetUiState,
+                retryAction = { viewModel.getAset() },
+                onDeleteClick = { aset -> viewModel.deleteAset(aset.id_aset) },
+                onEditClick = onEditClick,
+                navController = navController
+            )
+        }
     }
 }
 
