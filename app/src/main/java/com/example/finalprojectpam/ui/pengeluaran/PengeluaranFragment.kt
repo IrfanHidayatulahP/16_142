@@ -1,5 +1,6 @@
 package com.example.finalprojectpam.ui.pengeluaran
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,12 +48,15 @@ import com.example.finalprojectpam.databinding.FragmentPengeluaranBinding
 import com.example.finalprojectpam.model.Pendapatan
 import com.example.finalprojectpam.model.Pengeluaran
 import com.example.finalprojectpam.ui.ViewModel.PenyediaViewModel
+import com.example.finalprojectpam.ui.home.HomeViewModel
+import com.example.finalprojectpam.ui.home.SaldoUiState
 import com.example.finalprojectpam.ui.pendapatan.DapatUiState
 import com.example.finalprojectpam.ui.pendapatan.PendapatanViewModel
 
 class PengeluaranFragment : Fragment() {
 
     private lateinit var viewModel: PengeluaranViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,25 +64,38 @@ class PengeluaranFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(PengeluaranViewModel::class.java)
+        homeViewModel = ViewModelProvider(this, PenyediaViewModel.Factory).get(HomeViewModel::class.java)
 
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme {
+                    val saldoState = homeViewModel.saldoUiState
+                    val saldo = if (saldoState is SaldoUiState.Success) (saldoState as SaldoUiState.Success).saldo.saldo else 0
+
                     HomePengeluaran(
                         navigateToItemEntry = {
-                            findNavController().navigate(R.id.action_pengeluaran_to_insert)
+                            if (saldo < 0) {
+                                showSaldoMinusDialog()
+                            } else {
+                                findNavController().navigate(R.id.action_pengeluaran_to_insert)
+                            }
                         },
-                        onDetailClick = { keluar ->
-                            val action = PengeluaranFragmentDirections
-                                .actionPengeluaranToDetail(keluar.id_pengeluaran)
-                            findNavController().navigate(action)
-                        },
-                        viewModel = viewModel,
-                        navController = findNavController()
+                        navController = findNavController(),
+                        viewModel = viewModel
                     )
                 }
             }
         }
+    }
+    private fun showSaldoMinusDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Peringatan")
+            .setMessage("Keuangan anda sudah minus, apakah anda yakin menambah data pengeluaran?")
+            .setPositiveButton("Ya") { _, _ ->
+                findNavController().navigate(R.id.action_pengeluaran_to_insert)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 }
 
