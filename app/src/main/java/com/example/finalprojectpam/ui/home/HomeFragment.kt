@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -70,7 +71,7 @@ fun HomeScreen(
                 LoadingView()
             }
             is SaldoUiState.Success -> {
-                SuccessView(saldo = saldoState.saldo)
+                SuccessView(navController, saldo = saldoState.saldo)
             }
             is SaldoUiState.Error -> {
                 ErrorView(message = saldoState.message)
@@ -81,6 +82,7 @@ fun HomeScreen(
 
 @Composable
 fun SuccessView(
+    navController: NavController,
     saldo: Saldo
 ) {
     Column(
@@ -123,7 +125,8 @@ fun SuccessView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp),
-                    backgroundColor = saldoColor
+                    backgroundColor = saldoColor,
+                    onClick = { }
                 )
             }
         }
@@ -139,7 +142,8 @@ fun SuccessView(
                 modifier = Modifier
                     .weight(1f)
                     .height(120.dp),
-                backgroundColor = Color.Green
+                backgroundColor = Color.Green,
+                onClick = { navController.navigate(R.id.action_home_to_pendapatan) }
             )
             SaldoCard(
                 title = "Pengeluaran",
@@ -147,7 +151,8 @@ fun SuccessView(
                 modifier = Modifier
                     .weight(1f)
                     .height(120.dp),
-                backgroundColor = Color.Red
+                backgroundColor = Color.Red,
+                onClick = { navController.navigate(R.id.action_home_to_pengeluaran) }
             )
         }
     }
@@ -180,12 +185,15 @@ fun SaldoCard(
     title: String,
     amount: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.White
+    backgroundColor: Color = Color.White,
+    onClick: () -> Unit = {}
 ) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.elevatedCardElevation(4.dp),
-        modifier = modifier.padding(4.dp),
+        modifier = modifier
+            .padding(4.dp)
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(backgroundColor)
     ) {
         Column(

@@ -10,6 +10,12 @@
         android:name="com.example.finalprojectpam.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
+        <action
+            android:id="@+id/action_home_to_pendapatan"
+            app:destination="@+id/navigation_pendapatan" />
+        <action
+            android:id="@+id/action_home_to_pengeluaran"
+            app:destination="@+id/navigation_pengeluaran" />
 
     <!-- Asset Fragment -->
     <fragment
