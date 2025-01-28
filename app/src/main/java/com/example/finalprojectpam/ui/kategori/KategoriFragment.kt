@@ -22,15 +22,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,6 +85,7 @@ class KategoriFragment : Fragment() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeKategori(
     navigateToItemEntry: () -> Unit,
@@ -92,6 +96,19 @@ fun HomeKategori(
 ) {
     Scaffold(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text("Data Kategori") },
+                actions = {
+                    IconButton(onClick = { viewModel.getKategori() }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh"
+                        )
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
@@ -102,16 +119,18 @@ fun HomeKategori(
             }
         }
     ) { innerPadding ->
-        KatStatus (
-            katUiState = viewModel.katUiState,
-            retryAction = { viewModel.getKategori() },
-            modifier = Modifier.padding(innerPadding),
-            onEditClick = onEditClick,
-            onDeleteClick = { kat ->
-                viewModel.deleteKategori(kat.id_kategori)
-            },
-            navController = navController
-        )
+        Box(modifier = Modifier.padding(innerPadding)) {
+            KatStatus (
+                katUiState = viewModel.katUiState,
+                retryAction = { viewModel.getKategori() },
+                modifier = Modifier.padding(innerPadding),
+                onEditClick = onEditClick,
+                onDeleteClick = { kat ->
+                    viewModel.deleteKategori(kat.id_kategori)
+                },
+                navController = navController
+            )
+        }
     }
 }
 
