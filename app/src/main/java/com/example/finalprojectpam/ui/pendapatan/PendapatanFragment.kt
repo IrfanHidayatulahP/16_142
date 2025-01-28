@@ -21,15 +21,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,6 +82,7 @@ class PendapatanFragment : Fragment() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePendapatan(
     navigateToItemEntry: () -> Unit,
@@ -89,26 +93,41 @@ fun HomePendapatan(
 ) {
     Scaffold(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text("Data Pendapatan") },
+                actions = {
+                    IconButton(onClick = { viewModel.getPendapatan() }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh"
+                        )
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(50.dp)
+                modifier = Modifier.padding(18.dp)
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add Pendapatan")
             }
         }
     ) { innerPadding ->
-        DapatStatus (
-            dapatUiState = viewModel.dapatUiState,
-            retryAction = { viewModel.getPendapatan() },
-            modifier = Modifier.padding(innerPadding),
-            navController = navController,
-            onDetailClick = onDetailClick,
-            onDeleteClick = { dapat ->
-                viewModel.deletePendapatan(dapat.id_pendapatan)
-            }
-        )
+        Box(modifier = Modifier.padding(innerPadding)) {
+            DapatStatus (
+                dapatUiState = viewModel.dapatUiState,
+                retryAction = { viewModel.getPendapatan() },
+                modifier = Modifier.padding(innerPadding),
+                navController = navController,
+                onDetailClick = onDetailClick,
+                onDeleteClick = { dapat ->
+                    viewModel.deletePendapatan(dapat.id_pendapatan)
+                }
+            )
+        }
     }
 }
 

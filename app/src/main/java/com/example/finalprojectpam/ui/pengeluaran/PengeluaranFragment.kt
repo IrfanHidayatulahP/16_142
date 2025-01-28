@@ -23,15 +23,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -99,6 +102,7 @@ class PengeluaranFragment : Fragment() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePengeluaran(
     navigateToItemEntry: () -> Unit,
@@ -109,6 +113,19 @@ fun HomePengeluaran(
 ) {
     Scaffold(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = { Text("Data Pengeluaran") },
+                actions = {
+                    IconButton(onClick = { viewModel.getPengeluaran() }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh"
+                        )
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
@@ -119,16 +136,18 @@ fun HomePengeluaran(
             }
         }
     ) { innerPadding ->
-        KeluarStatus (
-            keluarUiState = viewModel.keluarUiState,
-            retryAction = { viewModel.getPengeluaran() },
-            modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailClick,
-            onDeleteClick = { keluar ->
-                viewModel.deletePendapatan(keluar.id_pengeluaran)
-            },
-            navController = navController
-        )
+        Box(modifier = Modifier.padding(innerPadding)) {
+            KeluarStatus (
+                keluarUiState = viewModel.keluarUiState,
+                retryAction = { viewModel.getPengeluaran() },
+                modifier = Modifier.padding(innerPadding),
+                onDetailClick = onDetailClick,
+                onDeleteClick = { keluar ->
+                    viewModel.deletePendapatan(keluar.id_pengeluaran)
+                },
+                navController = navController
+            )
+        }
     }
 }
 
